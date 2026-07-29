@@ -8,4 +8,6 @@ class AppColors {
   static const Color textDark = Color(0xFF1F2937);
   static const Color textLight = Color(0xFF9CA3AF);
   static const Color dangerRed = Color(0xFFDC2626); // Merah untuk titik banjir parah
+  static const Color primaryTeal = Color(0xFF0F767E); // Hijau kebiruan untuk background splash
+  static const Color softTeal = Color(0xFFE0F2F1); // Teal terang untuk icon circle
 }
