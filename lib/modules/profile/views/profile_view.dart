@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/image_helper.dart';
 import '../controllers/profile_controller.dart';
 import '../../../routes/app_routes.dart';
 import '../../main_navigation/controllers/main_navigation_controller.dart';
+import '../views/about_view.dart';
 
 class ProfileView extends GetView<ProfileController> {
   const ProfileView({super.key});
@@ -17,8 +19,10 @@ class ProfileView extends GetView<ProfileController> {
       backgroundColor: const Color(0xFFF4F6F9),
       body: Obx(() {
         final user = controller.currentUser.value;
-        final avatar = user?.avatarUrl ?? 
-            'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user?.name ?? "kaliwedi")}&background=0D8ABC&color=fff';
+        final avatar = () {
+          final url = resolveImageUrl(user?.avatarUrl);
+          return url.isNotEmpty ? url : 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user?.name ?? "kaliwedi")}&background=0D8ABC&color=fff';
+        }();
 
         return SingleChildScrollView(
           child: Column(
@@ -229,19 +233,7 @@ class ProfileView extends GetView<ProfileController> {
                         iconColor: const Color(0xFFE0F2FE),
                         iconAccent: Colors.blue.shade700,
                         title: 'Tentang Aplikasi',
-                        onTap: () {
-                          Get.dialog(AlertDialog(
-                            title: const Text('Tentang Kaliwedi'),
-                            content: const Text(
-                                'Kaliwedi v1.4.2\n\nSistem Peringatan Dini & Laporan Banjir Terpadu Kabupaten Indramayu.'),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Get.back(),
-                                child: const Text('Tutup'),
-                              )
-                            ],
-                          ));
-                        },
+                        onTap: () => Get.to(() => const AboutView()),
                       ),
                       _buildDivider(),
                       _buildMenuItem(
@@ -249,57 +241,7 @@ class ProfileView extends GetView<ProfileController> {
                         iconColor: const Color(0xFFE2F0FD),
                         iconAccent: Colors.teal.shade700,
                         title: 'Bantuan',
-                        onTap: () {
-                          Get.dialog(
-                            AlertDialog(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                              title: Row(
-                                children: [
-                                  const Icon(Icons.help_outline, color: AppColors.primaryTeal),
-                                  const SizedBox(width: 8),
-                                  const Text('Pusat Bantuan BPBD', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                                ],
-                              ),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Butuh bantuan darurat terkait bencana banjir? Hubungi layanan darurat BPBD Kabupaten Indramayu:',
-                                    style: TextStyle(fontSize: 13, height: 1.4),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  _buildHelpContactItem(
-                                    icon: Icons.phone_in_talk,
-                                    color: Colors.red.shade700,
-                                    title: 'Call Center Indramayu',
-                                    value: '112 (Bebas Pulsa)',
-                                  ),
-                                  const SizedBox(height: 12),
-                                  _buildHelpContactItem(
-                                    icon: Icons.chat_bubble_outline,
-                                    color: Colors.green.shade600,
-                                    title: 'WhatsApp BPBD Indramayu',
-                                    value: '0812-2345-6789 (Siaga)',
-                                  ),
-                                  const SizedBox(height: 12),
-                                  _buildHelpContactItem(
-                                    icon: Icons.location_on_outlined,
-                                    color: Colors.blue.shade700,
-                                    title: 'Alamat Kantor BPBD',
-                                    value: 'Jl. Jend. Sudirman No. 1, Indramayu',
-                                  ),
-                                ],
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Get.back(),
-                                  child: const Text('Tutup', style: TextStyle(color: AppColors.primaryTeal, fontWeight: FontWeight.bold)),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
+                        onTap: () => Get.toNamed(Routes.help),
                       ),
                     ],
                   ),
@@ -396,49 +338,5 @@ class ProfileView extends GetView<ProfileController> {
       indent: 60,
     );
   }
-
-  Widget _buildHelpContactItem({
-    required IconData icon,
-    required Color color,
-    required String title,
-    required String value,
-  }) {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(icon, color: color, size: 18),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textDark,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }
+

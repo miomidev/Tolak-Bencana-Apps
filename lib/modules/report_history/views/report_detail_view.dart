@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../core/models/report_model.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/image_helper.dart';
 import '../controllers/report_detail_controller.dart';
 
 class ReportDetailView extends GetView<ReportDetailController> {
@@ -71,9 +73,9 @@ class ReportDetailView extends GetView<ReportDetailController> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     image: DecorationImage(
-                      image: report.photoUrl!.startsWith('http')
-                          ? NetworkImage(report.photoUrl!) as ImageProvider
-                          : FileImage(File(report.photoUrl!)),
+                      image: resolveImageUrl(report.photoUrl).startsWith('http')
+                          ? NetworkImage(resolveImageUrl(report.photoUrl)) as ImageProvider
+                          : FileImage(File(resolveImageUrl(report.photoUrl))),
                       fit: BoxFit.cover,
                     ),
                     boxShadow: [

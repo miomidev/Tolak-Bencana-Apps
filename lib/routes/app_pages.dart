@@ -24,6 +24,10 @@ import '../modules/report_history/controllers/report_history_controller.dart';
 import '../modules/report_history/views/report_history_view.dart';
 import '../modules/report_history/controllers/report_detail_controller.dart';
 import '../modules/report_history/views/report_detail_view.dart';
+import '../modules/auth/forgot_password/controllers/forgot_password_controller.dart';
+import '../modules/auth/forgot_password/views/forgot_password_view.dart';
+import '../modules/help/controllers/help_controller.dart';
+import '../modules/help/views/help_view.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -119,6 +123,20 @@ class AppPages {
       page: () => const ReportDetailView(),
       binding: BindingsBuilder(() {
         Get.lazyPut<ReportDetailController>(() => ReportDetailController());
+      }),
+    ),
+    GetPage(
+      name: Routes.forgotPassword,
+      page: () => const ForgotPasswordView(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<ForgotPasswordController>(() => ForgotPasswordController());
+      }),
+    ),
+    GetPage(
+      name: Routes.help,
+      page: () => const HelpView(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<HelpController>(() => HelpController());
       }),
     ),
   ];

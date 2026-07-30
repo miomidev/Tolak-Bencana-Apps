@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../routes/app_routes.dart';
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -154,7 +155,7 @@ class LoginView extends GetView<LoginController> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () => Get.toNamed(Routes.forgotPassword),
                           child: const Text(
                             'Lupa kata sandi?',
                             style: TextStyle(

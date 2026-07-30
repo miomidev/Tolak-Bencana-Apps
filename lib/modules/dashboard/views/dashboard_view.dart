@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/models/report_model.dart';
+import '../../../core/utils/image_helper.dart';
 import '../controllers/dashboard_controller.dart';
 import '../../main_navigation/controllers/main_navigation_controller.dart';
 
@@ -459,8 +460,10 @@ class DashboardView extends GetView<DashboardController> {
                         itemCount: controller.currentComments.length,
                         itemBuilder: (context, index) {
                           final comment = controller.currentComments[index];
-                          final avatar = comment.user?.avatarUrl ?? 
-                              'https://ui-avatars.com/api/?name=${urlencode(comment.user?.name ?? "User")}';
+                    final avatar = () {
+                      final url = resolveImageUrl(comment.user?.avatarUrl);
+                      return url.isNotEmpty ? url : 'https://ui-avatars.com/api/?name=${urlencode(comment.user?.name ?? "User")}';
+                    }();
                           
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 16.0),
@@ -595,8 +598,10 @@ class ReportCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final avatar = report.user?.avatarUrl ?? 
-        'https://ui-avatars.com/api/?name=${Uri.encodeComponent(report.user?.name ?? "User")}';
+    final avatar = () {
+      final url = resolveImageUrl(report.user?.avatarUrl);
+      return url.isNotEmpty ? url : 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(report.user?.name ?? "User")}';
+    }();
 
     return Card(
       elevation: 0,
@@ -674,20 +679,29 @@ class ReportCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            // Image Section (If Available)
-            if (report.photoUrl != null && report.photoUrl!.isNotEmpty)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  report.photoUrl!,
-                  height: 160,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => _buildMockGradientCard(report),
-                ),
-              )
-            else
-              _buildMockGradientCard(report),
+            // Image Section with Badges
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: SizedBox(
+                height: 160,
+                width: double.infinity,
+                child: report.photoUrl != null && report.photoUrl!.isNotEmpty
+                    ? Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Image.network(
+                            resolveImageUrl(report.photoUrl),
+                            height: 160,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => _buildMockGradientCard(report),
+                          ),
+                          _reportBadges(report),
+                        ],
+                      )
+                    : _buildMockGradientCard(report),
+              ),
+            ),
             const SizedBox(height: 12),
 
             // Description
@@ -789,36 +803,20 @@ class ReportCard extends StatelessWidget {
   }
 
   Widget _buildMockGradientCard(ReportModel report) {
-    // Pick gradient colors and severity text based on severity
     List<Color> gradientColors;
-    String severityText;
-    Color badgeColor;
-    String heightText;
 
     switch (report.severity.toLowerCase()) {
       case 'critical':
         gradientColors = [const Color(0xFF1E3A8A), const Color(0xFF0284C7)];
-        severityText = 'Siaga';
-        badgeColor = const Color(0xFFEA580C);
-        heightText = '50 cm';
         break;
       case 'high':
         gradientColors = [const Color(0xFF0F767E), const Color(0xFF0D9488)];
-        severityText = 'Siaga';
-        badgeColor = const Color(0xFFF97316);
-        heightText = '45 cm';
         break;
       case 'medium':
         gradientColors = [const Color(0xFF115E59), const Color(0xFF14B8A6)];
-        severityText = 'Waspada';
-        badgeColor = const Color(0xFFEAB308);
-        heightText = '25 cm';
         break;
       default:
         gradientColors = [const Color(0xFF065F46), const Color(0xFF10B981)];
-        severityText = 'Waspada';
-        badgeColor = const Color(0xFF84CC16);
-        heightText = '15 cm';
     }
 
     return Container(
@@ -834,31 +832,11 @@ class ReportCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // 1. Severity Badge Top Left
-          Positioned(
-            top: 12,
-            left: 12,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: badgeColor,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                severityText,
-                style: const TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          
-          // 2. Bar Chart Icon in Center (simulated with 3 containers)
           Align(
-            alignment: Alignment.center,
-            child: Row(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Row(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -891,63 +869,113 @@ class ReportCard extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-
-          // 3. Bottom left: Foto Lapangan Badge
-          Positioned(
-            bottom: 12,
-            left: 12,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.4),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Row(
-                children: [
-                  Icon(Icons.camera_alt_outlined, color: Colors.white70, size: 12),
-                  SizedBox(width: 4),
-                  Text(
-                    'Foto lapangan',
-                    style: TextStyle(
-                      fontSize: 9,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
             ),
           ),
-
-          // 4. Bottom right: Height Badge
-          Positioned(
-            bottom: 12,
-            right: 12,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.4),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.water_drop_outlined, color: Colors.white70, size: 12),
-                  const SizedBox(width: 4),
-                  Text(
-                    heightText,
-                    style: const TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          _reportBadges(report),
         ],
       ),
+    );
+  }
+
+  Widget _reportBadges(ReportModel report) {
+    Color badgeColor;
+    String severityText;
+    String heightText;
+
+    switch (report.severity.toLowerCase()) {
+      case 'critical':
+        badgeColor = const Color(0xFFEA580C);
+        severityText = 'Siaga';
+        heightText = '50 cm';
+        break;
+      case 'high':
+        badgeColor = const Color(0xFFF97316);
+        severityText = 'Siaga';
+        heightText = '45 cm';
+        break;
+      case 'medium':
+        badgeColor = const Color(0xFFEAB308);
+        severityText = 'Waspada';
+        heightText = '25 cm';
+        break;
+      default:
+        badgeColor = const Color(0xFF84CC16);
+        severityText = 'Waspada';
+        heightText = '15 cm';
+    }
+
+    return Stack(
+      children: [
+        Positioned(
+          top: 12,
+          left: 12,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: badgeColor,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              severityText,
+              style: const TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 12,
+          left: 12,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.4),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Row(
+              children: [
+                Icon(Icons.camera_alt_outlined, color: Colors.white70, size: 12),
+                SizedBox(width: 4),
+                Text(
+                  'Foto lapangan',
+                  style: TextStyle(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 12,
+          right: 12,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.4),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.water_drop_outlined, color: Colors.white70, size: 12),
+                const SizedBox(width: 4),
+                Text(
+                  heightText,
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

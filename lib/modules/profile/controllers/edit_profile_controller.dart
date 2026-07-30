@@ -87,7 +87,6 @@ class EditProfileController extends GetxController {
       if (response.statusCode == 200) {
         final updatedUser = UserModel.fromJson(response.data['user']);
         
-        // Update ProfileController state
         if (Get.isRegistered<ProfileController>()) {
           Get.find<ProfileController>().currentUser.value = updatedUser;
         }
@@ -100,7 +99,7 @@ class EditProfileController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
         );
 
-        Get.back(); // Return to profile
+        Future.delayed(const Duration(milliseconds: 300), () => Get.back());
       }
     } on dio.DioException catch (e) {
       Get.snackbar(
