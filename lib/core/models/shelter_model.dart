@@ -1,4 +1,4 @@
-class ShelterModel {
+﻿class ShelterModel {
   final String id;
   final String name;
   final double latitude;

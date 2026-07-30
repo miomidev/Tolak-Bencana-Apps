@@ -186,8 +186,8 @@ class RegisterView extends GetView<RegisterController> {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      Wrap(
+                        alignment: WrapAlignment.center,
                         children: [
                           const Text(
                             'Sudah punya akun? ',

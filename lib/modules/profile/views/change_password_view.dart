@@ -63,7 +63,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.02),
+                      color: Colors.black.withValues(alpha: 0.02),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -81,6 +81,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                       label: 'KATA SANDI BARU',
                       controller: controller.newPasswordController,
                       hintText: 'Min. 8 karakter',
+                      showStrengthIndicator: true,
                     ),
                     const Divider(height: 1, indent: 16, endIndent: 16, color: Color(0xFFF1F5F9)),
                     _buildPasswordField(
@@ -101,7 +102,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryTeal,
                     foregroundColor: Colors.white,
-                    disabledBackgroundColor: AppColors.primaryTeal.withOpacity(0.6),
+                    disabledBackgroundColor: AppColors.primaryTeal.withValues(alpha: 0.6),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -131,6 +132,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
     required String label,
     required TextEditingController controller,
     required String hintText,
+    bool showStrengthIndicator = false,
   }) {
     final RxBool isObscured = true.obs;
 
@@ -180,9 +182,76 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                 ),
               ],
             ),
+            if (showStrengthIndicator) ...[
+              const SizedBox(height: 8),
+              _buildStrengthIndicator(),
+            ],
           ],
         ),
       );
     });
+  }
+
+  Widget _buildStrengthIndicator() {
+    final controller = Get.find<ChangePasswordController>();
+    return Obx(() {
+      final strength = controller.passwordStrength.value;
+      
+      // Determine colors and labels
+      Color color1 = Colors.grey.shade300;
+      Color color2 = Colors.grey.shade300;
+      Color color3 = Colors.grey.shade300;
+      String label = 'Terlalu Pendek';
+      Color labelColor = Colors.grey.shade500;
+
+      if (controller.newPasswordController.text.isNotEmpty) {
+        if (strength == 0) {
+          color1 = Colors.red.shade400;
+          label = 'Lemah';
+          labelColor = Colors.red.shade600;
+        } else if (strength == 1) {
+          color1 = Colors.orange.shade400;
+          color2 = Colors.orange.shade400;
+          label = 'Sedang';
+          labelColor = Colors.orange.shade700;
+        } else if (strength == 2) {
+          color1 = Colors.green.shade500;
+          color2 = Colors.green.shade500;
+          color3 = Colors.green.shade500;
+          label = 'Kuat';
+          labelColor = Colors.green.shade700;
+        }
+      }
+
+      return Row(
+        children: [
+          Expanded(child: _bar(color1)),
+          const SizedBox(width: 4),
+          Expanded(child: _bar(color2)),
+          const SizedBox(width: 4),
+          Expanded(child: _bar(color3)),
+          const SizedBox(width: 12),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+              color: labelColor,
+            ),
+          ),
+        ],
+      );
+    });
+  }
+
+  Widget _bar(Color color) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      height: 4,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(2),
+      ),
+    );
   }
 }

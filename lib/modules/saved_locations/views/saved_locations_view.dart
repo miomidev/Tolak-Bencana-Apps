@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../controllers/saved_locations_controller.dart';
@@ -60,7 +60,7 @@ class SavedLocationsView extends GetView<SavedLocationsController> {
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.02),
+                          color: Colors.black.withValues(alpha: 0.02),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -242,7 +242,7 @@ class SavedLocationFormBottomSheet extends GetView<SavedLocationsController> {
           // Forms Card Container
           Container(
             decoration: BoxDecoration(
-              color: const Color(0xFFF1F5F9).withOpacity(0.5),
+              color: const Color(0xFFF1F5F9).withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(

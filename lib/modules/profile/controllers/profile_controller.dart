@@ -118,6 +118,7 @@ class ProfileController extends GetxController {
   }
 
   Future<void> logout() async {
+    isLoading.value = true;
     try {
       await ApiClient.dio.post('/logout');
     } catch (_) {}
@@ -125,6 +126,8 @@ class ProfileController extends GetxController {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
     
-    Get.offAllNamed(Routes.login);
+    isLoading.value = false;
+    final username = currentUser.value?.username ?? 'kaliwedi';
+    Get.offAllNamed(Routes.logoutSuccess, arguments: username);
   }
 }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/models/report_model.dart';
@@ -87,8 +87,8 @@ class DashboardView extends GetView<DashboardController> {
                                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                     decoration: BoxDecoration(
                                       color: isOffline 
-                                          ? Colors.black.withOpacity(0.2) 
-                                          : Colors.white.withOpacity(0.12),
+                                          ? Colors.black.withValues(alpha: 0.2) 
+                                          : Colors.white.withValues(alpha: 0.12),
                                       borderRadius: BorderRadius.circular(20),
                                       border: Border.all(
                                         color: isOffline ? Colors.white30 : Colors.white24, 
@@ -148,7 +148,7 @@ class DashboardView extends GetView<DashboardController> {
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
+                              color: Colors.black.withValues(alpha: 0.05),
                               blurRadius: 10,
                               offset: const Offset(0, 4),
                             ),
@@ -182,7 +182,7 @@ class DashboardView extends GetView<DashboardController> {
                         Icon(Icons.wifi_off, color: Colors.orange.shade800, size: 14),
                         const SizedBox(width: 8),
                         Text(
-                          'Mode Offline — Peta tidak tersedia',
+                          'Mode Offline â€” Peta tidak tersedia',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -320,7 +320,7 @@ class DashboardView extends GetView<DashboardController> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -569,7 +569,7 @@ class DashboardView extends GetView<DashboardController> {
       width: 36,
       height: 36,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.12),
+        color: Colors.white.withValues(alpha: 0.12),
         shape: BoxShape.circle,
       ),
       child: Material(
@@ -845,7 +845,7 @@ class ReportCard extends StatelessWidget {
                   height: 40,
                   margin: const EdgeInsets.symmetric(horizontal: 2),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -854,7 +854,7 @@ class ReportCard extends StatelessWidget {
                   height: 55,
                   margin: const EdgeInsets.symmetric(horizontal: 2),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.25),
+                    color: Colors.white.withValues(alpha: 0.25),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -863,7 +863,7 @@ class ReportCard extends StatelessWidget {
                   height: 35,
                   margin: const EdgeInsets.symmetric(horizontal: 2),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.15),
+                    color: Colors.white.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -931,7 +931,7 @@ class ReportCard extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.4),
+              color: Colors.black.withValues(alpha: 0.4),
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Row(
@@ -956,7 +956,7 @@ class ReportCard extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.4),
+              color: Colors.black.withValues(alpha: 0.4),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(

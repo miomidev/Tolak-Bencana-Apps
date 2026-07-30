@@ -10,6 +10,26 @@ class ChangePasswordController extends GetxController {
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
+  final RxInt passwordStrength = 0.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    newPasswordController.addListener(_checkPasswordStrength);
+  }
+
+  void _checkPasswordStrength() {
+    final pass = newPasswordController.text;
+    int strength = 0;
+    if (pass.isNotEmpty) {
+      if (pass.length >= 8) strength++;
+      if (pass.contains(RegExp(r'[A-Z]')) || pass.contains(RegExp(r'[0-9]'))) strength++;
+      if (pass.contains(RegExp(r'[!@#\$%\^&\*(),.?":{}|<>]'))) strength++;
+      if (strength > 2) strength = 2;
+    }
+    passwordStrength.value = strength;
+  }
+
   Future<void> changePassword() async {
     final currentPw = currentPasswordController.text.trim();
     final newPw = newPasswordController.text.trim();

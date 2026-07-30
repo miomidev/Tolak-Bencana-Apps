@@ -40,7 +40,7 @@ class ReportModel {
   factory ReportModel.fromJson(Map<String, dynamic> json) {
     return ReportModel(
       id: json['id'] as String,
-      userId: json['user_id'] as String,
+      userId: json['user_id']?.toString() ?? '',
       latitude: double.tryParse(json['latitude']?.toString() ?? '0') ?? 0.0,
       longitude: double.tryParse(json['longitude']?.toString() ?? '0') ?? 0.0,
       address: json['address'] as String,

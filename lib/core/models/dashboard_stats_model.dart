@@ -1,4 +1,4 @@
-class DashboardStatsModel {
+﻿class DashboardStatsModel {
   final int activeReports;
   final int totalReports;
   final int percentageVerified;

@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
@@ -8,15 +8,15 @@ import '../../../core/models/report_model.dart';
 import '../../../core/models/saved_location_model.dart';
 import '../../../core/models/shelter_model.dart';
 
-// ── Map filter state ───────────────────────────────────────────────────
+// â”€â”€ Map filter state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 enum MapFilter { banjir, posAir, aman }
 
-// ── Selected location popup model ─────────────────────────────────────
+// â”€â”€ Selected location popup model â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class MapPopupData {
   final String title;
   final String statusLabel;   // e.g. "BANJIR", "AMAN", "WASPADA"
   final String statusLevel;   // e.g. "kritis", "waspada", "pantau", "aman"
-  final String waterLevel;    // e.g. "50–80 CM"  (empty if aman)
+  final String waterLevel;    // e.g. "50â€“80 CM"  (empty if aman)
   final String description;
   final bool canReport;       // show Tambah Laporan button
   final bool canViewAlert;    // show Lihat Info Bencana button
@@ -32,11 +32,11 @@ class MapPopupData {
   });
 }
 
-// ── Flood alert model for bottom panel ────────────────────────────────
+// â”€â”€ Flood alert model for bottom panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class FloodAlert {
   final String location;
   final String level;        // kritis | waspada | pantau
-  final String waterHeight;  // e.g. "50–80 CM"
+  final String waterHeight;  // e.g. "50â€“80 CM"
   final String description;
 
   const FloodAlert({
@@ -48,34 +48,34 @@ class FloodAlert {
 }
 
 class MapController extends GetxController {
-  // ── Location ──────────────────────────────────────────────────
+  // â”€â”€ Location â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   final RxDouble currentLat = (-6.3262).obs;
   final RxDouble currentLng = (108.3243).obs;
   final RxBool isLoadingLocation = false.obs;
   final RxBool isLoadingMarkers = false.obs;
   StreamSubscription<Position>? _positionSubscription;
 
-  // ── Data ──────────────────────────────────────────────────────
+  // â”€â”€ Data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   final RxList<ReportModel> reports = <ReportModel>[].obs;
   final RxList<SavedLocationModel> savedLocations = <SavedLocationModel>[].obs;
   final RxList<ShelterModel> shelters = <ShelterModel>[].obs;
   final RxList<FloodAlert> floodAlerts = <FloodAlert>[].obs;
 
-  // ── Filters ───────────────────────────────────────────────────
+  // â”€â”€ Filters â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   final RxBool showBanjir = true.obs;
   final RxBool showPosAir = true.obs;
   final RxBool showAman   = true.obs;
 
-  // ── UI state ──────────────────────────────────────────────────
+  // â”€â”€ UI state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   final RxBool isAlertPanelExpanded = true.obs;
   final Rxn<MapPopupData> selectedPopup = Rxn<MapPopupData>();
 
-  // ── Search ────────────────────────────────────────────────────
+  // â”€â”€ Search â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   final searchController = TextEditingController();
   final RxBool isSearchActive = false.obs;
   final RxList<String> searchSuggestions = <String>[].obs;
 
-  // ── Stats ─────────────────────────────────────────────────────
+  // â”€â”€ Stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   final RxInt banjirCount  = 2.obs;
   final RxInt waspataCount = 2.obs;
 
@@ -86,7 +86,7 @@ class MapController extends GetxController {
     fetchMapData();
   }
 
-  // ── Filter toggles ────────────────────────────────────────────
+  // â”€â”€ Filter toggles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   void toggleBanjir() => showBanjir.toggle();
   void togglePosAir() => showPosAir.toggle();
   void toggleAman()   => showAman.toggle();
@@ -98,7 +98,7 @@ class MapController extends GetxController {
     selectedPopup.value = data;
   }
 
-  // ── Search ────────────────────────────────────────────────────
+  // â”€â”€ Search â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   void onSearchChanged(String query) {
     if (query.isEmpty) {
       searchSuggestions.clear();
@@ -147,7 +147,7 @@ class MapController extends GetxController {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
-  // ── Location ──────────────────────────────────────────────────
+  // â”€â”€ Location â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   Future<void> _checkLocationPermission() async {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) return;
@@ -196,7 +196,7 @@ class MapController extends GetxController {
     await _getCurrentLocation();
   }
 
-  // ── Fetch data ────────────────────────────────────────────────
+  // â”€â”€ Fetch data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   Future<void> fetchMapData() async {
     isLoadingMarkers.value = true;
     try {
@@ -249,9 +249,9 @@ class MapController extends GetxController {
 
   String _randCm(String s) {
     switch (s) {
-      case 'critical': return '80–120';
-      case 'high':     return '50–80';
-      case 'medium':   return '30–50';
+      case 'critical': return '80â€“120';
+      case 'high':     return '50â€“80';
+      case 'medium':   return '30â€“50';
       default:         return '< 30';
     }
   }
@@ -324,25 +324,25 @@ class MapController extends GetxController {
       const FloodAlert(
         location: 'Jl. Jenderal Sudirman',
         level: 'kritis',
-        waterHeight: '50–80',
-        description: 'Banjir tinggi di 30–80 cm, jangan melewati jalan ini.',
+        waterHeight: '50â€“80',
+        description: 'Banjir tinggi di 30â€“80 cm, jangan melewati jalan ini.',
       ),
       const FloodAlert(
         location: 'Jl. Surabaya',
         level: 'waspada',
-        waterHeight: '30–50',
-        description: 'Banjir tinggi 30–50 cm, hati-hati saat melintas.',
+        waterHeight: '30â€“50',
+        description: 'Banjir tinggi 30â€“50 cm, hati-hati saat melintas.',
       ),
       const FloodAlert(
         location: 'Jl. Urip Sumoharjo',
         level: 'pantau',
         waterHeight: '< 30',
-        description: 'PAR-PAR, banjir tinggi 10–20 cm, harap berhati-hati, kondisi normal.',
+        description: 'PAR-PAR, banjir tinggi 10â€“20 cm, harap berhati-hati, kondisi normal.',
       ),
       const FloodAlert(
         location: 'Jl. Pemuda',
         level: 'waspada',
-        waterHeight: '30–50',
+        waterHeight: '30â€“50',
         description: 'PAR-PAR, Waspada gangguan Tubhes sadfehmemser.',
       ),
     ]);

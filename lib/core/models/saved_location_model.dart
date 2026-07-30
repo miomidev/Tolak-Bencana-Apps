@@ -1,4 +1,4 @@
-class SavedLocationModel {
+﻿class SavedLocationModel {
   final String id;
   final String userId;
   final String placeName;

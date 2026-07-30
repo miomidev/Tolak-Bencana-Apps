@@ -197,7 +197,7 @@ class _AboutViewState extends State<AboutView> {
                           const SizedBox(height: 28),
 
                           Text(
-                            '© 2026 Pemerintah Kabupaten Indramayu. Hak cipta dilindungi.',
+                            'Â© 2026 Pemerintah Kabupaten Indramayu. Hak cipta dilindungi.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 11,
@@ -291,7 +291,13 @@ class _InfoRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: TextStyle(fontSize: 13.5, color: Colors.grey.shade500, fontWeight: FontWeight.w500)),
-          Text(value, style: const TextStyle(fontSize: 13.5, color: AppColors.textDark, fontWeight: FontWeight.bold)),
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: const TextStyle(fontSize: 13.5, color: AppColors.textDark, fontWeight: FontWeight.bold)
+            ),
+          ),
         ],
       ),
     );

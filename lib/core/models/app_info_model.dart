@@ -1,4 +1,4 @@
-class AppInfoModel {
+﻿class AppInfoModel {
   final String id;
   final String appName;
   final String description;

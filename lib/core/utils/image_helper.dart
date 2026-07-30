@@ -1,4 +1,4 @@
-import '../config/app_config.dart';
+﻿import '../config/app_config.dart';
 
 String resolveImageUrl(String? url) {
   if (url == null || url.isEmpty) return '';

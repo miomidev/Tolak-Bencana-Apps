@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/models/help_model.dart';
@@ -14,7 +14,7 @@ class HelpView extends GetView<HelpController> {
       body: SafeArea(
         child: Column(
           children: [
-            // ── Top Bar ─────────────────────────────────────────
+            // â”€â”€ Top Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
               child: Row(
@@ -48,7 +48,7 @@ class HelpView extends GetView<HelpController> {
               ),
             ),
 
-            // ── Body ────────────────────────────────────────────
+            // â”€â”€ Body â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
@@ -62,11 +62,11 @@ class HelpView extends GetView<HelpController> {
                   child: ListView(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
                     children: [
-                      // ── Contact Card ───────────────────────
+                      // â”€â”€ Contact Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                       _ContactsCard(contacts: controller.contacts),
                       const SizedBox(height: 24),
 
-                      // ── FAQ Section ────────────────────────
+                      // â”€â”€ FAQ Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                       const Text(
                         'Pertanyaan Umum',
                         style: TextStyle(
@@ -83,7 +83,7 @@ class HelpView extends GetView<HelpController> {
                       ),
                       const SizedBox(height: 20),
 
-                      // ── Emergency Banner ───────────────────
+                      // â”€â”€ Emergency Banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
@@ -134,7 +134,7 @@ class HelpView extends GetView<HelpController> {
   }
 }
 
-// ── Contact List Card ──────────────────────────────────────────────────
+// â”€â”€ Contact List Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _ContactsCard extends StatelessWidget {
   final List<HelpContactModel> contacts;
   const _ContactsCard({required this.contacts});
@@ -252,7 +252,7 @@ class _ContactRow extends StatelessWidget {
   }
 }
 
-// ── FAQ Accordion Card ────────────────────────────────────────────────
+// â”€â”€ FAQ Accordion Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _FaqCard extends StatelessWidget {
   final List<FaqModel> faqs;
   final RxInt expandedIndex;

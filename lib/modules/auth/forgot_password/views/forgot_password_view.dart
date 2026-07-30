@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../controllers/forgot_password_controller.dart';
@@ -329,7 +329,7 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                   ),
                   decoration: const InputDecoration(
                     isDense: true,
-                    hintText: '• • • • • •',
+                    hintText: 'â€¢ â€¢ â€¢ â€¢ â€¢ â€¢',
                     hintStyle: TextStyle(
                       color: Colors.black26,
                       fontSize: 22,
@@ -421,7 +421,7 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
         ),
         child: Center(
           child: Text(
-            hasChar ? '•' : '',
+            hasChar ? 'â€¢' : '',
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../core/models/report_model.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/image_helper.dart';
 import '../controllers/report_detail_controller.dart';
@@ -80,7 +79,7 @@ class ReportDetailView extends GetView<ReportDetailController> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -106,7 +105,7 @@ class ReportDetailView extends GetView<ReportDetailController> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.01),
+                      color: Colors.black.withValues(alpha: 0.01),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -186,7 +185,7 @@ class ReportDetailView extends GetView<ReportDetailController> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.01),
+                      color: Colors.black.withValues(alpha: 0.01),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -243,7 +242,7 @@ class ReportDetailView extends GetView<ReportDetailController> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.01),
+                      color: Colors.black.withValues(alpha: 0.01),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),

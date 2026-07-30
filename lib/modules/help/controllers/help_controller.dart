@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/models/help_model.dart';
@@ -41,7 +41,7 @@ class HelpController extends GetxController {
       ]);
       faqs.assignAll([
         const FaqModel(id: 1, question: 'Bagaimana cara membuat laporan baru?', answer: "Buka halaman Beranda, lalu ketuk tombol '+' untuk membuat laporan baru. Isi detail masalah, foto, dan lokasi, kemudian kirim."),
-        const FaqModel(id: 2, question: 'Berapa lama laporan saya diproses?', answer: 'Laporan biasanya diproses dalam 1–3 hari kerja. Anda dapat memantau status laporan melalui menu Riwayat Laporan.'),
+        const FaqModel(id: 2, question: 'Berapa lama laporan saya diproses?', answer: 'Laporan biasanya diproses dalam 1â€“3 hari kerja. Anda dapat memantau status laporan melalui menu Riwayat Laporan.'),
         const FaqModel(id: 3, question: 'Apakah laporan saya bisa anonim?', answer: 'Saat ini laporan memerlukan akun terdaftar. Identitas Anda hanya terlihat oleh petugas yang berwenang, bukan publik.'),
         const FaqModel(id: 4, question: 'Bagaimana jika laporan saya ditolak?', answer: 'Jika laporan ditolak, Anda akan mendapat notifikasi beserta alasannya. Anda dapat mengedit laporan dan mengirim ulang.'),
       ]);

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/models/report_model.dart';
@@ -214,7 +214,7 @@ class ReportHistoryView extends GetView<ReportHistoryController> {
         border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.01),
+            color: Colors.black.withValues(alpha: 0.01),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -273,7 +273,7 @@ class ReportHistoryView extends GetView<ReportHistoryController> {
           const SizedBox(height: 6),
           // Subtitle: LP ID, Category, Date
           Text(
-            '$reportCode · ${report.category}\n$dateStr',
+            '$reportCode Â· ${report.category}\n$dateStr',
             style: TextStyle(
               fontSize: 11,
               color: Colors.grey.shade500,
@@ -418,7 +418,7 @@ class ReportHistoryView extends GetView<ReportHistoryController> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          '$reportCode · ${report.category}',
+                          '$reportCode Â· ${report.category}',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey.shade500,
@@ -465,7 +465,7 @@ class ReportHistoryView extends GetView<ReportHistoryController> {
               // Info Table Container Card
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9).withOpacity(0.5),
+                  color: const Color(0xFFF1F5F9).withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(

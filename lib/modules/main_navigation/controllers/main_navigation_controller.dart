@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+﻿import 'package:get/get.dart';
 
 class MainNavigationController extends GetxController {
   final RxInt currentIndex = 0.obs;

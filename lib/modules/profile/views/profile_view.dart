@@ -74,7 +74,7 @@ class ProfileView extends GetView<ProfileController> {
                       '${user?.username ?? "kaliwedi"}@email.com',
                       style: TextStyle(
                         fontSize: 13,
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -146,7 +146,7 @@ class ProfileView extends GetView<ProfileController> {
                       Switch(
                         value: controller.gpsActive.value,
                         onChanged: controller.toggleGps,
-                        activeColor: AppColors.primaryTeal,
+                        activeThumbColor: AppColors.primaryTeal,
                       ),
                     ],
                   ),
@@ -256,7 +256,7 @@ class ProfileView extends GetView<ProfileController> {
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: controller.logout,
+                    onPressed: () => Get.toNamed(Routes.logout),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade50,
                       foregroundColor: Colors.red,

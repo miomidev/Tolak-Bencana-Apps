@@ -28,6 +28,8 @@ import '../modules/auth/forgot_password/controllers/forgot_password_controller.d
 import '../modules/auth/forgot_password/views/forgot_password_view.dart';
 import '../modules/help/controllers/help_controller.dart';
 import '../modules/help/views/help_view.dart';
+import '../modules/profile/views/logout_view.dart';
+import '../modules/profile/views/logout_success_view.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -138,6 +140,14 @@ class AppPages {
       binding: BindingsBuilder(() {
         Get.lazyPut<HelpController>(() => HelpController());
       }),
+    ),
+    GetPage(
+      name: Routes.logout,
+      page: () => const LogoutView(),
+    ),
+    GetPage(
+      name: Routes.logoutSuccess,
+      page: () => const LogoutSuccessView(),
     ),
   ];
 }

@@ -302,7 +302,7 @@ class DashboardController extends GetxController {
     } 
 
     try {
-      userPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      userPosition = await Geolocator.getCurrentPosition(locationSettings: const LocationSettings(accuracy: LocationAccuracy.high));
       if (sortBy.value == 'Terdekat') {
         applyFiltersAndSort();
       }

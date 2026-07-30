@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/logo_painter.dart';
@@ -37,7 +37,7 @@ class WelcomeView extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14.0,
-                  color: AppColors.textLight.withOpacity(0.9),
+                  color: AppColors.textLight.withValues(alpha: 0.9),
                   fontWeight: FontWeight.w500,
                 ),
               ),

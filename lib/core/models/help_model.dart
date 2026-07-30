@@ -1,4 +1,4 @@
-class HelpContactModel {
+﻿class HelpContactModel {
   final int id;
   final String type; // phone, email, website
   final String title;

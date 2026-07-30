@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+﻿import 'package:get/get.dart';
 import '../../../core/models/report_model.dart';
 
 class ReportDetailController extends GetxController {
