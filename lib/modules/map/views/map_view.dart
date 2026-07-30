@@ -4,6 +4,7 @@ import 'package:flutter_map/flutter_map.dart' hide MapController;
 import 'package:latlong2/latlong.dart';
 import '../../../core/theme/app_colors.dart';
 import '../controllers/map_controller.dart';
+import '../../../routes/app_routes.dart';
 
 class MapView extends GetView<MapController> {
   const MapView({super.key});
@@ -56,11 +57,7 @@ class MapView extends GetView<MapController> {
       }),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Buka halaman Lapor Banjir (segera dibuat)
-          Get.snackbar('Info', 'Fitur Lapor akan segera dibuat', 
-            backgroundColor: AppColors.primaryOrange, 
-            colorText: AppColors.white
-          );
+          Get.toNamed(Routes.reportFlood);
         },
         label: const Text('Lapor Banjir', style: TextStyle(color: AppColors.white)),
         icon: const Icon(Icons.report_problem, color: AppColors.white),

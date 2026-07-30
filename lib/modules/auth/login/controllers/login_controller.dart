@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../routes/app_routes.dart';
+import '../../../../core/network/api_client.dart';
 
 class LoginController extends GetxController {
   final emailController = TextEditingController();
@@ -33,10 +34,9 @@ class LoginController extends GetxController {
 
     isLoading.value = true;
     try {
-      final dio = Dio();
-      // Use the local IP of the API
-      final response = await dio.post(
-        'http://192.168.1.12:8000/api/login',
+      // Use central ApiClient
+      final response = await ApiClient.dio.post(
+        '/login',
         data: {
           'login': emailController.text.trim(),
           'password': passwordController.text.trim(),
@@ -56,8 +56,8 @@ class LoginController extends GetxController {
             backgroundColor: Colors.green,
             colorText: Colors.white);
 
-        // Navigate to map
-        Get.offAllNamed(Routes.map);
+        // Navigate to main navigation layout
+        Get.offAllNamed(Routes.mainNavigation);
       }
     } on DioException catch (e) {
       String message = 'Terjadi kesalahan jaringan';

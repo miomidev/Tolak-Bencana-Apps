@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../routes/app_routes.dart';
+import '../../../../core/network/api_client.dart';
 
 class RegisterController extends GetxController {
   final nameController = TextEditingController();
@@ -34,8 +35,7 @@ class RegisterController extends GetxController {
                         emailController.text.trim().isNotEmpty &&
                         phoneController.text.trim().isNotEmpty &&
                         passwordController.text.isNotEmpty &&
-                        confirmPasswordController.text.isNotEmpty &&
-                        (passwordController.text == confirmPasswordController.text);
+                        confirmPasswordController.text.isNotEmpty;
   }
 
   void togglePasswordVisibility() {
@@ -51,9 +51,8 @@ class RegisterController extends GetxController {
 
     isLoading.value = true;
     try {
-      final dio = Dio();
-      final response = await dio.post(
-        'http://192.168.1.12:8000/api/register',
+      final response = await ApiClient.dio.post(
+        '/register',
         data: {
           'name': nameController.text.trim(),
           'username': usernameController.text.trim(),
@@ -77,8 +76,8 @@ class RegisterController extends GetxController {
             backgroundColor: Colors.green,
             colorText: Colors.white);
 
-        // Navigate to map
-        Get.offAllNamed(Routes.map);
+        // Navigate to main navigation layout
+        Get.offAllNamed(Routes.mainNavigation);
       }
     } on DioException catch (e) {
       String message = 'Terjadi kesalahan jaringan';
