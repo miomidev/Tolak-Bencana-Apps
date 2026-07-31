@@ -4,7 +4,6 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/image_helper.dart';
 import '../controllers/profile_controller.dart';
 import '../../../routes/app_routes.dart';
-import '../../main_navigation/controllers/main_navigation_controller.dart';
 import '../views/about_view.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -195,12 +194,9 @@ class ProfileView extends GetView<ProfileController> {
                         icon: Icons.notifications_none_outlined,
                         iconColor: const Color(0xFFFEF3C7),
                         iconAccent: Colors.amber.shade700,
-                        title: 'Notifikasi',
+                        title: 'Pengaturan Notifikasi',
                         onTap: () {
-                          // Switch bottom tab index to Notif
-                          if (Get.isRegistered<MainNavigationController>()) {
-                            Get.find<MainNavigationController>().changeTab(3);
-                          }
+                          Get.toNamed(Routes.notificationSettings);
                         },
                       ),
                     ],

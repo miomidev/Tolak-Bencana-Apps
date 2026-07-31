@@ -17,4 +17,5 @@ abstract class Routes {
   static const help = '/help';
   static const logout = '/logout';
   static const logoutSuccess = '/logout-success';
+  static const notificationSettings = '/notification-settings';
 }

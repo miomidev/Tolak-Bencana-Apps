@@ -1,5 +1,6 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../routes/app_routes.dart';
 
 class OnboardingController extends GetxController {
@@ -28,7 +29,15 @@ class OnboardingController extends GetxController {
     currentPage.value = index;
   }
 
-  void nextPage() {
+  void nextPage() async {
+    if (currentPage.value == 0) {
+      // Minta izin akses lokasi saat klik lanjut di "Laporkan titik banjir dengan GPS"
+      await Permission.location.request();
+    } else if (currentPage.value == 1) {
+      // Minta izin notifikasi saat klik lanjut di "Dapatkan notifikasi peringatan dini"
+      await Permission.notification.request();
+    }
+
     if (currentPage.value < onboardingData.length - 1) {
       pageController.nextPage(
         duration: const Duration(milliseconds: 300),

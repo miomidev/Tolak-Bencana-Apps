@@ -30,6 +30,7 @@ import '../modules/help/controllers/help_controller.dart';
 import '../modules/help/views/help_view.dart';
 import '../modules/profile/views/logout_view.dart';
 import '../modules/profile/views/logout_success_view.dart';
+import '../modules/profile/views/notification_settings_view.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -148,6 +149,10 @@ class AppPages {
     GetPage(
       name: Routes.logoutSuccess,
       page: () => const LogoutSuccessView(),
+    ),
+    GetPage(
+      name: Routes.notificationSettings,
+      page: () => const NotificationSettingsView(),
     ),
   ];
 }

@@ -54,7 +54,7 @@ class _MapViewState extends State<MapView> {
         children: [
           _TealHeader(controller: controller),
           Expanded(
-            child: Obx(() => Stack(
+            child: Stack(
               children: [
                 // â”€â”€ Map â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                 FlutterMap(
@@ -72,7 +72,7 @@ class _MapViewState extends State<MapView> {
                       urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                       userAgentPackageName: 'com.kaliwedi.app',
                     ),
-                    MarkerLayer(markers: _buildAllMarkers()),
+                    Obx(() => MarkerLayer(markers: _buildAllMarkers())),
                   ],
                 ),
 
@@ -92,13 +92,15 @@ class _MapViewState extends State<MapView> {
                 _FloodAlertPanel(controller: controller),
 
                 // â”€â”€ Loading indicator â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-                if (controller.isLoadingMarkers.value)
-                  const Positioned(
-                    top: 8, right: 8,
-                    child: _LoadingChip(),
-                  ),
+                Obx(() => controller.isLoadingMarkers.value
+                  ? const Positioned(
+                      top: 8, right: 8,
+                      child: _LoadingChip(),
+                    )
+                  : const SizedBox.shrink(),
+                ),
               ],
-            )),
+            ),
           ),
         ],
       ),
@@ -112,14 +114,33 @@ class _MapViewState extends State<MapView> {
     // User location
     markers.add(Marker(
       point: LatLng(controller.currentLat.value, controller.currentLng.value),
-      width: 36, height: 36,
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
-          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 4)],
-        ),
-        child: const Icon(Icons.my_location, color: AppColors.primaryTeal, size: 22),
+      width: 60, height: 60,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: 40, height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.blue.withValues(alpha: 0.2),
+            ),
+          ),
+          Container(
+            width: 22, height: 22,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+              boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 4)],
+            ),
+          ),
+          Container(
+            width: 14, height: 14,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.blue,
+            ),
+          ),
+        ],
       ),
     ));
 
@@ -133,11 +154,9 @@ class _MapViewState extends State<MapView> {
       }
     }
 
-    // Saved locations / water posts
-    if (controller.showPosAir.value) {
-      for (final loc in controller.savedLocations) {
-        markers.add(_savedLocMarker(loc));
-      }
+    // Saved locations (Selalu tampil, terpisah dari Pos Air)
+    for (final loc in controller.savedLocations) {
+      markers.add(_savedLocMarker(loc));
     }
 
     // Shelters (shown as aman/green)
@@ -186,14 +205,23 @@ class _MapViewState extends State<MapView> {
   }
 
   Marker _savedLocMarker(SavedLocationModel loc) {
+    IconData icon;
+    if (loc.iconType == 'home') {
+      icon = Icons.home;
+    } else if (loc.iconType == 'work') {
+      icon = Icons.work;
+    } else {
+      icon = Icons.bookmark;
+    }
+
     return Marker(
       point: LatLng(loc.latitude, loc.longitude),
       width: 38, height: 38,
       child: GestureDetector(
         onTap: () => controller.showMarkerPopup(MapPopupData(
           title: loc.placeName,
-          statusLabel: 'POS AIR',
-          statusLevel: 'posair',
+          statusLabel: 'LOKASI TERSIMPAN',
+          statusLevel: 'aman',
           description: loc.address,
           waterLevel: '',
           canReport: false,
@@ -201,11 +229,12 @@ class _MapViewState extends State<MapView> {
         )),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.amber.shade700,
+            color: Colors.indigo.shade500,
             shape: BoxShape.circle,
-            boxShadow: [BoxShadow(color: Colors.amber.withValues(alpha: 0.4), blurRadius: 6)],
+            boxShadow: [BoxShadow(color: Colors.indigo.withValues(alpha: 0.4), blurRadius: 6)],
+            border: Border.all(color: Colors.white, width: 2),
           ),
-          child: const Icon(Icons.water, color: Colors.white, size: 20),
+          child: Icon(icon, color: Colors.white, size: 18),
         ),
       ),
     );
