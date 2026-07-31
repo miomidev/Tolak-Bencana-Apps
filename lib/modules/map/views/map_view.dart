@@ -66,6 +66,9 @@ class _MapViewState extends State<MapView> {
                     ),
                     initialZoom: 14.0,
                     onTap: (_, _) => controller.dismissPopup(),
+                    onPositionChanged: (camera, hasGesture) {
+                      controller.currentZoom.value = camera.zoom;
+                    },
                   ),
                   children: [
                     TileLayer(
@@ -172,19 +175,60 @@ class _MapViewState extends State<MapView> {
   Marker _reportMarker(ReportModel r) {
     final color = _severityColor(r.severity);
     final label = _severityLabel(r.severity);
+    final zoom = controller.currentZoom.value;
+
+    if (zoom < 9) {
+      if (r.severity != 'critical' && r.severity != 'high') {
+        return Marker(point: LatLng(r.latitude, r.longitude), width: 0, height: 0, child: const SizedBox.shrink());
+      }
+      return Marker(
+        point: LatLng(r.latitude, r.longitude),
+        width: 12, height: 12,
+        child: Container(
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white, width: 1.5),
+            boxShadow: [BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 4)],
+          ),
+        ),
+      );
+    }
+
+    final popupData = MapPopupData(
+      title: r.address,
+      statusLabel: label.toUpperCase(),
+      statusLevel: _severityToLevel(r.severity),
+      waterLevel: '${_severityCm(r.severity)} CM',
+      description: r.description,
+      canReport: true,
+      canViewAlert: true,
+    );
+
+    if (zoom < 12.5) {
+      return Marker(
+        point: LatLng(r.latitude, r.longitude),
+        width: 28, height: 28,
+        child: GestureDetector(
+          onTap: () => controller.showMarkerPopup(popupData),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              border: Border.all(color: color, width: 2.5),
+              boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 4)],
+            ),
+            child: Icon(Icons.water_drop, color: color, size: 16),
+          ),
+        ),
+      );
+    }
+
     return Marker(
       point: LatLng(r.latitude, r.longitude),
       width: 64, height: 60,
       child: GestureDetector(
-        onTap: () => controller.showMarkerPopup(MapPopupData(
-          title: r.address,
-          statusLabel: label.toUpperCase(),
-          statusLevel: _severityToLevel(r.severity),
-          waterLevel: '${_severityCm(r.severity)} CM',
-          description: r.description,
-          canReport: true,
-          canViewAlert: true,
-        )),
+        onTap: () => controller.showMarkerPopup(popupData),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -192,12 +236,13 @@ class _MapViewState extends State<MapView> {
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
                 color: color, borderRadius: BorderRadius.circular(4),
+                boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 2)],
               ),
               child: Text(label.toUpperCase(),
                   style: const TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold)),
             ),
             const SizedBox(height: 2),
-            Icon(Icons.water_drop, color: color, size: 26),
+            Icon(Icons.water_drop, color: color, size: 28, shadows: const [Shadow(color: Colors.black26, blurRadius: 4)]),
           ],
         ),
       ),
@@ -214,19 +259,45 @@ class _MapViewState extends State<MapView> {
       icon = Icons.bookmark;
     }
 
+    final zoom = controller.currentZoom.value;
+    
+    if (zoom < 9) {
+      return Marker(point: LatLng(loc.latitude, loc.longitude), width: 0, height: 0, child: const SizedBox.shrink());
+    }
+
+    final popupData = MapPopupData(
+      title: loc.placeName,
+      statusLabel: 'LOKASI TERSIMPAN',
+      statusLevel: 'aman',
+      description: loc.address,
+      waterLevel: '',
+      canReport: false,
+      canViewAlert: false,
+    );
+
+    if (zoom < 12.5) {
+      return Marker(
+        point: LatLng(loc.latitude, loc.longitude),
+        width: 18, height: 18,
+        child: GestureDetector(
+          onTap: () => controller.showMarkerPopup(popupData),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.indigo.shade500,
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 1.5),
+            ),
+            child: Icon(icon, color: Colors.white, size: 10),
+          ),
+        ),
+      );
+    }
+
     return Marker(
       point: LatLng(loc.latitude, loc.longitude),
       width: 38, height: 38,
       child: GestureDetector(
-        onTap: () => controller.showMarkerPopup(MapPopupData(
-          title: loc.placeName,
-          statusLabel: 'LOKASI TERSIMPAN',
-          statusLevel: 'aman',
-          description: loc.address,
-          waterLevel: '',
-          canReport: false,
-          canViewAlert: false,
-        )),
+        onTap: () => controller.showMarkerPopup(popupData),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.indigo.shade500,
@@ -241,18 +312,40 @@ class _MapViewState extends State<MapView> {
   }
 
   Marker _shelterMarker(ShelterModel s) {
+    final zoom = controller.currentZoom.value;
+    
+    if (zoom < 9) {
+      return Marker(point: LatLng(s.latitude, s.longitude), width: 0, height: 0, child: const SizedBox.shrink());
+    }
+
+    final popupData = MapPopupData(
+      title: s.name,
+      statusLabel: 'AMAN',
+      statusLevel: 'aman',
+      description: s.address,
+      canReport: false,
+      canViewAlert: false,
+    );
+
+    if (zoom < 12.5) {
+      return Marker(
+        point: LatLng(s.latitude, s.longitude),
+        width: 18, height: 18,
+        child: GestureDetector(
+          onTap: () => controller.showMarkerPopup(popupData),
+          child: Container(
+            decoration: BoxDecoration(color: Colors.green.shade600, shape: BoxShape.circle),
+            child: const Icon(Icons.safety_check, color: Colors.white, size: 10),
+          ),
+        ),
+      );
+    }
+
     return Marker(
       point: LatLng(s.latitude, s.longitude),
       width: 38, height: 38,
       child: GestureDetector(
-        onTap: () => controller.showMarkerPopup(MapPopupData(
-          title: s.name,
-          statusLabel: 'AMAN',
-          statusLevel: 'aman',
-          description: s.address,
-          canReport: false,
-          canViewAlert: false,
-        )),
+        onTap: () => controller.showMarkerPopup(popupData),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.green.shade600,

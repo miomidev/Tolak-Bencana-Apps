@@ -1,8 +1,9 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/models/saved_location_model.dart';
 import '../../../routes/app_routes.dart';
+import '../../map/controllers/map_controller.dart';
 
 class SavedLocationsController extends GetxController {
   final RxBool isLoading = false.obs;
@@ -56,6 +57,10 @@ class SavedLocationsController extends GetxController {
       ]);
     } finally {
       isLoading.value = false;
+      // Sinkronisasi data dengan MapController agar marker di peta utama ter-update!
+      if (Get.isRegistered<MapController>()) {
+        Get.find<MapController>().savedLocations.assignAll(locations);
+      }
     }
   }
 

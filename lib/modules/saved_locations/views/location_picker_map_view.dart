@@ -1,4 +1,5 @@
-﻿import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_map/flutter_map.dart' as fm;
 import 'package:latlong2/latlong.dart';
@@ -20,9 +21,16 @@ class LocationPickerMapController extends GetxController {
     resolveAddress(currentCenter.value);
   }
 
+  Timer? _debounce;
+
   void updateCenter(LatLng newCenter) {
     currentCenter.value = newCenter;
-    resolveAddress(newCenter);
+    currentAddress.value = 'Mencari alamat...';
+    
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 800), () {
+      resolveAddress(newCenter);
+    });
   }
 
   Future<void> resolveAddress(LatLng position) async {
@@ -66,6 +74,12 @@ class LocationPickerMapController extends GetxController {
         'address': currentAddress.value,
       },
     );
+  }
+
+  @override
+  void onClose() {
+    _debounce?.cancel();
+    super.onClose();
   }
 }
 

@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
@@ -51,6 +51,7 @@ class MapController extends GetxController {
   // â”€â”€ Location â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   final RxDouble currentLat = (-6.3262).obs;
   final RxDouble currentLng = (108.3243).obs;
+  final RxDouble currentZoom = 13.0.obs;
   final RxBool isLoadingLocation = false.obs;
   final RxBool isLoadingMarkers = false.obs;
   StreamSubscription<Position>? _positionSubscription;
