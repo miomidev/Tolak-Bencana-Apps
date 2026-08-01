@@ -95,34 +95,44 @@ class _MapViewState extends State<MapView> {
                 _FloodAlertPanel(controller: controller),
 
                 // ── Evacuation Button ─────────────────────────────
-                Positioned(
-                  left: 16,
-                  bottom: 210,
-                  child: GestureDetector(
-                    onTap: () => Get.toNamed(Routes.evacuation),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFDC2626),
-                        borderRadius: BorderRadius.circular(24),
-                        boxShadow: [
-                          BoxShadow(color: Colors.red.withValues(alpha: 0.4), blurRadius: 10, offset: const Offset(0, 4)),
-                        ],
-                      ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.emergency, color: Colors.white, size: 18),
-                          SizedBox(width: 6),
-                          Text(
-                            'Jalur Evakuasi',
-                            style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                // Positioned at bottom-left, above the flood alert panel
+                // but BELOW the marker popup card (which sits at bottom: 200)
+                Obx(() {
+                  // Hide button when popup is visible to avoid overlap
+                  final hasPopup = controller.selectedPopup.value != null;
+                  return Positioned(
+                    left: 16,
+                    bottom: hasPopup ? 8 : 210,
+                    child: AnimatedSlide(
+                      duration: const Duration(milliseconds: 200),
+                      offset: Offset.zero,
+                      child: GestureDetector(
+                        onTap: () => Get.toNamed(Routes.evacuation),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFDC2626),
+                            borderRadius: BorderRadius.circular(24),
+                            boxShadow: [
+                              BoxShadow(color: Colors.red.withValues(alpha: 0.4), blurRadius: 10, offset: const Offset(0, 4)),
+                            ],
                           ),
-                        ],
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.emergency, color: Colors.white, size: 18),
+                              SizedBox(width: 6),
+                              Text(
+                                'Jalur Evakuasi',
+                                style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                }),
 
                 // â”€â”€ Loading indicator â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                 Obx(() => controller.isLoadingMarkers.value

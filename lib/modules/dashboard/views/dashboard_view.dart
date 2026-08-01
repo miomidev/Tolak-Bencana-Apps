@@ -295,21 +295,15 @@ class DashboardView extends GetView<DashboardController> {
                         final report = controller.filteredReports[index];
                         return ReportCard(
                           report: report,
-                          onLike: () async {
-                            final guest = await AuthService.isGuest();
-                            if (guest) {
+                          onLike: () {
+                            if (AuthService.isGuestObs.value) {
                               _showGuestLoginDialog();
                               return;
                             }
                             controller.toggleLike(report);
                           },
-                          onComment: () async {
-                            final guest = await AuthService.isGuest();
-                            if (guest) {
-                              _showGuestLoginDialog();
-                              return;
-                            }
-                            if (!context.mounted) return;
+                          onComment: () {
+                            // Guests can VIEW comments, just not submit
                             _showCommentsBottomSheet(context, report);
                           },
                         );
@@ -570,39 +564,105 @@ class DashboardView extends GetView<DashboardController> {
                     }),
                   ),
                   const Divider(height: 1),
-                  // Text input
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    color: Colors.white,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: controller.commentTextController,
-                            decoration: InputDecoration(
-                              hintText: 'Tulis komentar...',
-                              hintStyle: const TextStyle(fontSize: 14),
-                              border: OutlineInputBorder(
+                  // Text input – guest sees a "login to comment" prompt instead
+                  Obx(() {
+                    final isGuest = AuthService.isGuestObs.value;
+                    if (isGuest) {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          color: Colors.white,
+                          child: InkWell(
+                            onTap: () {
+                              Get.back();
+                              Get.dialog(
+                                AlertDialog(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                  title: const Row(
+                                    children: [
+                                      Icon(Icons.lock_outline, color: AppColors.primaryTeal),
+                                      SizedBox(width: 8),
+                                      Text('Perlu Login', style: TextStyle(fontSize: 16)),
+                                    ],
+                                  ),
+                                  content: const Text(
+                                    'Untuk menulis komentar, silakan masuk atau daftar akun terlebih dahulu.',
+                                    style: TextStyle(fontSize: 13, height: 1.5),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Get.back(),
+                                      child: Text('Nanti', style: TextStyle(color: Colors.grey.shade600)),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Get.back();
+                                        Get.toNamed(Routes.login);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.primaryTeal,
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                      ),
+                                      child: const Text('Masuk', style: TextStyle(color: Colors.white)),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade100,
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: Colors.grey.shade300),
+                                border: Border.all(color: Colors.grey.shade300),
                               ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.lock_outline, size: 16, color: Colors.grey.shade500),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Login untuk menulis komentar...',
+                                    style: TextStyle(fontSize: 13, color: Colors.grey.shade500),
+                                  ),
+                                ],
                               ),
-                              fillColor: Colors.grey.shade100,
-                              filled: true,
                             ),
-                            maxLines: null,
                           ),
+                        );
+                      }
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        color: Colors.white,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: controller.commentTextController,
+                                decoration: InputDecoration(
+                                  hintText: 'Tulis komentar...',
+                                  hintStyle: const TextStyle(fontSize: 14),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide(color: Colors.grey.shade300),
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8,
+                                  ),
+                                  fillColor: Colors.grey.shade100,
+                                  filled: true,
+                                ),
+                                maxLines: null,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            IconButton(
+                              icon: const Icon(Icons.send, color: AppColors.primaryTeal),
+                              onPressed: () => controller.addComment(report),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 8),
-                        IconButton(
-                          icon: const Icon(Icons.send, color: AppColors.primaryTeal),
-                          onPressed: () => controller.addComment(report),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ],
               );

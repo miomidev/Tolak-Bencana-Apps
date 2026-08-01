@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/services/auth_service.dart';
@@ -19,6 +18,9 @@ class ProfileController extends GetxController {
     super.onInit();
     fetchUserProfile();
     _checkInitialGpsState();
+    // Re-check guest state whenever the reactive observable changes
+    // (e.g. after login from the guest login dialog)
+    ever(AuthService.isGuestObs, (_) => fetchUserProfile());
   }
 
   Future<void> _checkInitialGpsState() async {
@@ -136,10 +138,10 @@ class ProfileController extends GetxController {
     try {
       await ApiClient.dio.post('/logout');
     } catch (_) {}
-    
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('auth_token');
-    
+
+    // Clear session and update reactive state
+    await AuthService.clearSession();
+
     isLoading.value = false;
     final username = currentUser.value?.username ?? 'kaliwedi';
     Get.offAllNamed(Routes.logoutSuccess, arguments: username);

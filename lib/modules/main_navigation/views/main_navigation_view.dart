@@ -76,9 +76,8 @@ class MainNavigationView extends GetView<MainNavigationController> {
                   ),
                   // Middle: + button
                   InkWell(
-                    onTap: () async {
-                      final guest = await AuthService.isGuest();
-                      if (guest) {
+                    onTap: () {
+                      if (AuthService.isGuestObs.value) {
                         Get.dialog(
                           AlertDialog(
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
