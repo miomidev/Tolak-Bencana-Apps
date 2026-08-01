@@ -94,6 +94,36 @@ class _MapViewState extends State<MapView> {
                 // â”€â”€ Bottom flood alert panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                 _FloodAlertPanel(controller: controller),
 
+                // ── Evacuation Button ─────────────────────────────
+                Positioned(
+                  left: 16,
+                  bottom: 210,
+                  child: GestureDetector(
+                    onTap: () => Get.toNamed(Routes.evacuation),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFDC2626),
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(color: Colors.red.withValues(alpha: 0.4), blurRadius: 10, offset: const Offset(0, 4)),
+                        ],
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.emergency, color: Colors.white, size: 18),
+                          SizedBox(width: 6),
+                          Text(
+                            'Jalur Evakuasi',
+                            style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
                 // â”€â”€ Loading indicator â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
                 Obx(() => controller.isLoadingMarkers.value
                   ? const Positioned(

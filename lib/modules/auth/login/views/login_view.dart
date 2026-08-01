@@ -267,6 +267,35 @@ class LoginView extends GetView<LoginController> {
                           ),
                         ],
                       ),
+                      const SizedBox(height: 16),
+                      // Guest login button
+                      GestureDetector(
+                        onTap: controller.loginAsGuest,
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade100,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.grey.shade300),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.person_outline, color: Colors.grey.shade600, size: 18),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Lanjutkan sebagai Tamu',
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 20),
                     ],
                   ),

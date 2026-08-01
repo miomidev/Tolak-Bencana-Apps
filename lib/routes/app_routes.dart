@@ -18,4 +18,7 @@ abstract class Routes {
   static const logout = '/logout';
   static const logoutSuccess = '/logout-success';
   static const notificationSettings = '/notification-settings';
+  static const evacuation = '/evacuation';
+  static const evacuationRoute = '/evacuation-route';
+  static const editReport = '/edit-report';
 }

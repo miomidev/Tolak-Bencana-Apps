@@ -31,6 +31,10 @@ import '../modules/help/views/help_view.dart';
 import '../modules/profile/views/logout_view.dart';
 import '../modules/profile/views/logout_success_view.dart';
 import '../modules/profile/views/notification_settings_view.dart';
+import '../modules/map/views/evacuation_view.dart';
+import '../modules/map/views/evacuation_route_view.dart';
+import '../modules/map/controllers/evacuation_controller.dart';
+import '../modules/report_history/views/edit_report_view.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -153,6 +157,27 @@ class AppPages {
     GetPage(
       name: Routes.notificationSettings,
       page: () => const NotificationSettingsView(),
+    ),
+    GetPage(
+      name: Routes.evacuation,
+      page: () => const EvacuationView(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<EvacuationController>(() => EvacuationController());
+      }),
+    ),
+    GetPage(
+      name: Routes.evacuationRoute,
+      page: () => const EvacuationRouteView(),
+      binding: BindingsBuilder(() {
+        // EvacuationController already registered from evacuation page
+        if (!Get.isRegistered<EvacuationController>()) {
+          Get.lazyPut<EvacuationController>(() => EvacuationController());
+        }
+      }),
+    ),
+    GetPage(
+      name: Routes.editReport,
+      page: () => const EditReportView(),
     ),
   ];
 }

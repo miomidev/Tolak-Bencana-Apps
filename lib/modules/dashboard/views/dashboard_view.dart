@@ -5,6 +5,8 @@ import '../../../core/models/report_model.dart';
 import '../../../core/utils/image_helper.dart';
 import '../controllers/dashboard_controller.dart';
 import '../../main_navigation/controllers/main_navigation_controller.dart';
+import '../../../core/services/auth_service.dart';
+import '../../../routes/app_routes.dart';
 
 class DashboardView extends GetView<DashboardController> {
   const DashboardView({super.key});
@@ -293,8 +295,23 @@ class DashboardView extends GetView<DashboardController> {
                         final report = controller.filteredReports[index];
                         return ReportCard(
                           report: report,
-                          onLike: () => controller.toggleLike(report),
-                          onComment: () => _showCommentsBottomSheet(context, report),
+                          onLike: () async {
+                            final guest = await AuthService.isGuest();
+                            if (guest) {
+                              _showGuestLoginDialog();
+                              return;
+                            }
+                            controller.toggleLike(report);
+                          },
+                          onComment: () async {
+                            final guest = await AuthService.isGuest();
+                            if (guest) {
+                              _showGuestLoginDialog();
+                              return;
+                            }
+                            if (!context.mounted) return;
+                            _showCommentsBottomSheet(context, report);
+                          },
                         );
                       },
                       childCount: controller.filteredReports.length,
@@ -386,6 +403,42 @@ class DashboardView extends GetView<DashboardController> {
           ),
         ),
       ],
+    );
+  }
+
+  Future<void> _showGuestLoginDialog() async {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Row(
+          children: [
+            Icon(Icons.lock_outline, color: AppColors.primaryTeal),
+            SizedBox(width: 8),
+            Text('Perlu Login', style: TextStyle(fontSize: 16)),
+          ],
+        ),
+        content: const Text(
+          'Fitur ini hanya tersedia untuk pengguna yang sudah login.\n\nSilakan masuk atau daftar akun untuk melanjutkan.',
+          style: TextStyle(fontSize: 13, height: 1.5),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('Nanti', style: TextStyle(color: Colors.grey.shade600)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+              Get.toNamed(Routes.login);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryTeal,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            child: const Text('Masuk', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
     );
   }
 

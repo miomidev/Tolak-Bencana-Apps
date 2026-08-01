@@ -1,7 +1,8 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/network/api_client.dart';
+import '../../../core/services/auth_service.dart';
 import '../../../core/models/report_model.dart';
 
 class ReportHistoryController extends GetxController {
@@ -28,6 +29,9 @@ class ReportHistoryController extends GetxController {
   }
 
   Future<void> fetchReportHistory() async {
+    final isGuest = await AuthService.isGuest();
+    if (isGuest) return;
+
     isLoading.value = true;
     try {
       final response = await ApiClient.dio.get('/my-reports');

@@ -1,5 +1,6 @@
-﻿import 'package:get/get.dart';
+import 'package:get/get.dart';
 import '../../../core/network/api_client.dart';
+import '../../../core/services/auth_service.dart';
 import '../../../core/models/notification_model.dart';
 
 class NotificationController extends GetxController {
@@ -13,6 +14,9 @@ class NotificationController extends GetxController {
   }
 
   Future<void> fetchNotifications() async {
+    final isGuest = await AuthService.isGuest();
+    if (isGuest) return;
+
     isLoading.value = true;
     try {
       final response = await ApiClient.dio.get('/notifications');

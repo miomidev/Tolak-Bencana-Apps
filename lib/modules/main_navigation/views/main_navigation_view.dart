@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../dashboard/views/dashboard_view.dart';
@@ -10,6 +10,7 @@ import '../../dashboard/controllers/dashboard_controller.dart';
 import '../../notification/controllers/notification_controller.dart';
 import '../../profile/views/profile_view.dart';
 import '../../../routes/app_routes.dart';
+import '../../../core/services/auth_service.dart';
 
 class MainNavigationView extends GetView<MainNavigationController> {
   const MainNavigationView({super.key});
@@ -75,7 +76,44 @@ class MainNavigationView extends GetView<MainNavigationController> {
                   ),
                   // Middle: + button
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
+                      final guest = await AuthService.isGuest();
+                      if (guest) {
+                        Get.dialog(
+                          AlertDialog(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                            title: const Row(
+                              children: [
+                                Icon(Icons.lock_outline, color: AppColors.primaryTeal),
+                                SizedBox(width: 8),
+                                Text('Perlu Login', style: TextStyle(fontSize: 16)),
+                              ],
+                            ),
+                            content: const Text(
+                              'Fitur mengirim laporan hanya tersedia untuk pengguna yang sudah login.\n\nSilakan masuk atau daftar akun untuk melanjutkan.',
+                              style: TextStyle(fontSize: 13, height: 1.5),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Get.back(),
+                                child: Text('Nanti', style: TextStyle(color: Colors.grey.shade600)),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Get.back();
+                                  Get.toNamed(Routes.login);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primaryTeal,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                ),
+                                child: const Text('Masuk', style: TextStyle(color: Colors.white)),
+                              ),
+                            ],
+                          ),
+                        );
+                        return;
+                      }
                       Get.toNamed(Routes.reportFlood);
                     },
                     borderRadius: BorderRadius.circular(24),

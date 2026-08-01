@@ -17,6 +17,11 @@ class ProfileView extends GetView<ProfileController> {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F9),
       body: Obx(() {
+        // ── Guest Mode: show login prompt ──────────────────────────────────
+        if (controller.isGuest.value) {
+          return _GuestProfilePrompt();
+        }
+
         final user = controller.currentUser.value;
         final avatar = () {
           final url = resolveImageUrl(user?.avatarUrl);
@@ -336,3 +341,284 @@ class ProfileView extends GetView<ProfileController> {
   }
 }
 
+// ── Guest Profile Prompt ──────────────────────────────────────────────────────
+class _GuestProfilePrompt extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+        return SingleChildScrollView(
+          child: Column(
+          children: [
+            // Teal header (same style as logged-in)
+        Container(
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            color: AppColors.primaryTeal,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(32),
+              bottomRight: Radius.circular(32),
+            ),
+          ),
+          padding: const EdgeInsets.fromLTRB(20, 60, 20, 32),
+          child: Column(
+            children: [
+              const Text(
+                'Profil Saya',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 24),
+              // Guest avatar placeholder
+              Container(
+                width: 108,
+                height: 108,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withValues(alpha: 0.2),
+                  border: Border.all(color: Colors.white38, width: 2),
+                ),
+                child: const Icon(Icons.person_outline, size: 54, color: Colors.white70),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Mode Tamu',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Anda belum masuk ke akun',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.white.withValues(alpha: 0.75),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 32),
+
+        // Info card
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryTeal.withValues(alpha: 0.08),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.lock_outline, size: 36, color: AppColors.primaryTeal),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Login untuk Akses Penuh',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1E293B),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Masuk atau daftar akun untuk mengakses profil, riwayat laporan, lokasi tersimpan, dan pengaturan notifikasi.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey.shade600,
+                    height: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // Feature list
+                _FeatureRow(icon: Icons.person_outline, label: 'Edit profil & foto'),
+                const SizedBox(height: 8),
+                _FeatureRow(icon: Icons.assignment_outlined, label: 'Riwayat laporan banjir'),
+                const SizedBox(height: 8),
+                _FeatureRow(icon: Icons.place_outlined, label: 'Simpan lokasi favorit'),
+                const SizedBox(height: 8),
+                _FeatureRow(icon: Icons.notifications_none_outlined, label: 'Pengaturan notifikasi'),
+                const SizedBox(height: 24),
+                // Login button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Get.toNamed(Routes.login),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryTeal,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: const Text(
+                      'Masuk ke Akun',
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                // Register button
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () => Get.toNamed(Routes.register),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.primaryTeal,
+                      side: const BorderSide(color: AppColors.primaryTeal),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: const Text(
+                      'Daftar Akun Baru',
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 24),
+
+        // About & Help (still accessible for guests)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              children: [
+                _GuestMenuItem(
+                  icon: Icons.info_outline,
+                  iconColor: const Color(0xFFE0F2FE),
+                  iconAccent: Colors.blue.shade700,
+                  title: 'Tentang Aplikasi',
+                  onTap: () => Get.to(() => const AboutView()),
+                ),
+                Divider(color: Colors.grey.shade100, height: 1, indent: 60),
+                _GuestMenuItem(
+                  icon: Icons.help_outline,
+                  iconColor: const Color(0xFFE2F0FD),
+                  iconAccent: Colors.teal.shade700,
+                  title: 'Bantuan',
+                  onTap: () => Get.toNamed(Routes.help),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 24),
+        Text(
+          'Versi Aplikasi 1.4.2',
+          style: TextStyle(
+            fontSize: 11,
+            color: Colors.grey.shade400,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 40),
+      ],
+        ),
+    );
+  }
+}
+
+class _FeatureRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  const _FeatureRow({required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 18, color: AppColors.primaryTeal),
+        const SizedBox(width: 10),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 13, color: Color(0xFF475569)),
+        ),
+      ],
+    );
+  }
+}
+
+class _GuestMenuItem extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final Color iconAccent;
+  final String title;
+  final VoidCallback onTap;
+
+  const _GuestMenuItem({
+    required this.icon,
+    required this.iconColor,
+    required this.iconAccent,
+    required this.title,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: iconColor,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: iconAccent, size: 20),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textDark,
+                ),
+              ),
+            ),
+            Icon(Icons.chevron_right, color: Colors.grey.shade400, size: 20),
+          ],
+        ),
+      ),
+    );
+  }
+}
