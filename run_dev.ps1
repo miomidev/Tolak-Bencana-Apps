@@ -22,4 +22,5 @@ $apiUrl = "http://${ipAddress}:8000/api"
 Write-Host "[RUN] Menjalankan Flutter dengan API_URL: $apiUrl" -ForegroundColor Cyan
 
 # Run Flutter with the dynamically injected API URL (and disable CORS on web for dev)
-flutter run --dart-define=API_URL=$apiUrl --web-browser-flag "--disable-web-security"
+flutter run --dart-define=API_URL=$apiUrl --web-browser-flag "--disable-web-security" @args
+
