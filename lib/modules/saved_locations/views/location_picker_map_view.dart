@@ -116,6 +116,14 @@ class LocationPickerMapView extends StatelessWidget {
             options: fm.MapOptions(
               initialCenter: controller.currentCenter.value,
               initialZoom: 14.0,
+              minZoom: 10.5,
+              maxZoom: 18.0,
+              cameraConstraint: fm.CameraConstraint.containCenter(
+                bounds: fm.LatLngBounds(
+                  const LatLng(-6.6500, 107.8800),
+                  const LatLng(-6.1800, 108.5500),
+                ),
+              ),
               onPositionChanged: (camera, hasGesture) {
                 if (hasGesture) {
                   controller.updateCenter(camera.center);

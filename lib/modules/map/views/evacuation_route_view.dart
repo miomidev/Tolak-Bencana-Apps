@@ -111,6 +111,14 @@ class _EvacuationRouteViewState extends State<EvacuationRouteView> {
               options: MapOptions(
                 initialCenter: LatLng(userLat, userLng),
                 initialZoom: 14.0,
+                minZoom: 10.5,
+                maxZoom: 18.0,
+                cameraConstraint: CameraConstraint.containCenter(
+                  bounds: LatLngBounds(
+                    const LatLng(-6.6500, 107.8800),
+                    const LatLng(-6.1800, 108.5500),
+                  ),
+                ),
               ),
               children: [
                 TileLayer(

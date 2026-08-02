@@ -3,14 +3,15 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MapLauncherHelper {
-  /// Opens external Google Maps app or web maps for driving navigation
+  /// Opens external Google Maps app or web maps (default: motor / two-wheeler)
   static Future<void> openInGoogleMaps({
     required double latitude,
     required double longitude,
     String? destinationName,
+    String mode = 'l', // 'l' = two-wheeler (motor), 'd' = driving (mobil), 'w' = walking
   }) async {
-    // 1. Google Navigation intent (directly starts turn-by-turn navigation in Google Maps)
-    final googleNavUri = Uri.parse('google.navigation:q=$latitude,$longitude&mode=d');
+    // 1. Google Navigation intent (mode=l is two-wheeler / motor in Google Maps)
+    final googleNavUri = Uri.parse('google.navigation:q=$latitude,$longitude&mode=$mode');
 
     // 2. Geo URI scheme
     final geoUri = Uri.parse(
@@ -20,8 +21,13 @@ class MapLauncherHelper {
     );
 
     // 3. Universal Google Maps Directions Web URL
+    final travelMode = mode == 'l'
+        ? 'two-wheeler'
+        : (mode == 'w'
+            ? 'walking'
+            : (mode == 'b' ? 'bicycling' : 'driving'));
     final webMapsUri = Uri.parse(
-      'https://www.google.com/maps/dir/?api=1&destination=$latitude,$longitude&travelmode=driving',
+      'https://www.google.com/maps/dir/?api=1&destination=$latitude,$longitude&travelmode=$travelMode',
     );
 
     try {
