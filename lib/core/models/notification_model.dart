@@ -1,4 +1,4 @@
-﻿class NotificationModel {
+class NotificationModel {
   final String id;
   final String userId;
   final String title;
@@ -30,6 +30,34 @@
       sentAt: DateTime.parse(json['sent_at'] as String),
       timeAgo: json['time_ago'] as String? ?? '',
     );
+  }
+
+  String get formattedDateTime {
+    final months = [
+      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+    final days = [
+      'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'
+    ];
+    final dayName = days[sentAt.weekday - 1];
+    final monthName = months[sentAt.month - 1];
+    final hour = sentAt.hour.toString().padLeft(2, '0');
+    final minute = sentAt.minute.toString().padLeft(2, '0');
+    return '$dayName, ${sentAt.day} $monthName ${sentAt.year} • $hour:$minute WIB';
+  }
+
+  String get badgeLabel {
+    switch (type) {
+      case 'emergency_alert':
+        return 'SIAGA 1 (BAHAYA)';
+      case 'flood_alert':
+        return 'SIAGA 2 (WASPADA)';
+      case 'report_update':
+        return 'STATUS LAPORAN';
+      default:
+        return 'SIARAN INFORMASI';
+    }
   }
 
   Map<String, dynamic> toJson() {

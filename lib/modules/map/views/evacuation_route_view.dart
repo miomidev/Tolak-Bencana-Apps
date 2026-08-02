@@ -4,6 +4,7 @@ import 'package:flutter_map/flutter_map.dart' hide MapController;
 import 'package:flutter_map/flutter_map.dart' as fm show MapController;
 import 'package:latlong2/latlong.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/map_launcher_helper.dart';
 import '../controllers/evacuation_controller.dart';
 import '../controllers/map_controller.dart';
 
@@ -353,16 +354,10 @@ class _RouteInfoCard extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: () {
-                final lat = shelter.latitude;
-                final lng = shelter.longitude;
-                // URL for Google Maps navigation (opened via url_launcher on device)
-                // https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving
-                Get.snackbar(
-                  'Buka Google Maps',
-                  'Navigasi ke ${shelter.name} (lat: ${lat.toStringAsFixed(4)}, lng: ${lng.toStringAsFixed(4)})',
-                  backgroundColor: AppColors.primaryTeal,
-                  colorText: Colors.white,
-                  snackPosition: SnackPosition.TOP,
+                MapLauncherHelper.openInGoogleMaps(
+                  latitude: shelter.latitude,
+                  longitude: shelter.longitude,
+                  destinationName: shelter.name,
                 );
               },
               icon: const Icon(Icons.open_in_new, size: 16),

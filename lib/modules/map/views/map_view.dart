@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/models/report_model.dart';
 import '../../../core/models/saved_location_model.dart';
 import '../../../core/models/shelter_model.dart';
+import '../../../core/utils/map_launcher_helper.dart';
 import '../controllers/map_controller.dart';
 import '../../main_navigation/controllers/main_navigation_controller.dart';
 import '../../../routes/app_routes.dart';
@@ -249,6 +250,8 @@ class _MapViewState extends State<MapView> {
       description: r.description,
       canReport: true,
       canViewAlert: true,
+      latitude: r.latitude,
+      longitude: r.longitude,
     );
 
     if (zoom < 12.5) {
@@ -319,6 +322,8 @@ class _MapViewState extends State<MapView> {
       waterLevel: '',
       canReport: false,
       canViewAlert: false,
+      latitude: loc.latitude,
+      longitude: loc.longitude,
     );
 
     if (zoom < 12.5) {
@@ -371,6 +376,8 @@ class _MapViewState extends State<MapView> {
       description: s.address,
       canReport: false,
       canViewAlert: false,
+      latitude: s.latitude,
+      longitude: s.longitude,
     );
 
     if (zoom < 12.5) {
@@ -948,9 +955,9 @@ class _MarkerPopupCard extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(14, 6, 14, 12),
                   child: Row(
                     children: [
-                      if (popup.canReport)
+                      if (popup.canReport) ...[
                         _PopupBtn(
-                          label: 'Tambah Laporan',
+                          label: 'Lapor',
                           icon: Icons.add_circle_outline,
                           color: AppColors.primaryTeal,
                           onTap: () {
@@ -958,14 +965,22 @@ class _MarkerPopupCard extends StatelessWidget {
                             Get.toNamed(Routes.reportFlood);
                           },
                         ),
-                      if (popup.canReport && popup.canViewAlert) const SizedBox(width: 8),
-                      if (popup.canViewAlert)
+                        const SizedBox(width: 8),
+                      ],
+                      if (popup.latitude != null && popup.longitude != null) ...[
                         _PopupBtn(
-                          label: 'Lihat Info Bencana',
-                          icon: Icons.info_outline,
-                          color: Colors.blue.shade700,
-                          onTap: () => controller.dismissPopup(),
+                          label: 'Buka di Maps',
+                          icon: Icons.navigation_outlined,
+                          color: const Color(0xFFDC2626),
+                          onTap: () {
+                            MapLauncherHelper.openInGoogleMaps(
+                              latitude: popup.latitude!,
+                              longitude: popup.longitude!,
+                              destinationName: popup.title,
+                            );
+                          },
                         ),
+                      ],
                     ],
                   ),
                 ),

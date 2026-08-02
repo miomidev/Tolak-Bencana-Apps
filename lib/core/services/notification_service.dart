@@ -5,6 +5,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import '../network/api_client.dart';
 import '../models/notification_model.dart';
+import '../../routes/app_routes.dart';
+import '../../modules/main_navigation/controllers/main_navigation_controller.dart';
 import 'auth_service.dart';
 
 /// NotificationService
@@ -157,8 +159,16 @@ class NotificationService extends GetxService {
 
   // ── Notification tap handler ──────────────────────────────────────────────
   void _onNotificationTap(NotificationResponse response) {
-    // Navigate to notification tab
-    Get.toNamed('/notifications');
+    if (Get.isRegistered<MainNavigationController>()) {
+      Get.find<MainNavigationController>().changeTab(3);
+    } else {
+      Get.offAllNamed(Routes.mainNavigation);
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (Get.isRegistered<MainNavigationController>()) {
+          Get.find<MainNavigationController>().changeTab(3);
+        }
+      });
+    }
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────
