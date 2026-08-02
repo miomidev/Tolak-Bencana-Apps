@@ -60,11 +60,17 @@ class _MapViewState extends State<MapView> {
                 FlutterMap(
                   mapController: _mapController,
                   options: MapOptions(
-                    initialCenter: LatLng(
-                      controller.currentLat.value,
-                      controller.currentLng.value,
+                    initialCenter: const LatLng(-6.3262, 108.3243),
+                    initialZoom: 12.0,
+                    minZoom: 9.0,
+                    maxZoom: 18.0,
+                    // Constrain camera to Indramayu region
+                    cameraConstraint: CameraConstraint.containCenter(
+                      bounds: LatLngBounds(
+                        const LatLng(-6.7500, 107.8000), // SW corner
+                        const LatLng(-5.9000, 108.8000), // NE corner
+                      ),
                     ),
-                    initialZoom: 14.0,
                     onTap: (_, _) => controller.dismissPopup(),
                     onPositionChanged: (camera, hasGesture) {
                       controller.currentZoom.value = camera.zoom;
