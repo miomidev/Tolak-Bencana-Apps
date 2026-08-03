@@ -1,9 +1,9 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../core/network/api_client.dart';
-import '../../../core/theme/app_colors.dart';
 import '../../../routes/app_routes.dart';
 import '../../dashboard/controllers/dashboard_controller.dart';
 import '../../main_navigation/controllers/main_navigation_controller.dart';
@@ -15,7 +15,7 @@ class ReportFloodController extends GetxController {
   final titleController = TextEditingController();
   final locationController = TextEditingController();
   final heightController = TextEditingController();
-  final categoryController = TextEditingController(text: 'genangan air');
+  final RxnString selectedCategory = RxnString();
   final situationController = TextEditingController();
 
   final RxDouble latitude = 0.0.obs;
@@ -28,21 +28,30 @@ class ReportFloodController extends GetxController {
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
         photoPath.value = image.path;
-        Get.snackbar(
-          'Foto Berhasil Dipilih',
-          'Foto bukti berhasil diambil dari galeri!',
-          backgroundColor: AppColors.primaryTeal,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-        );
       }
     } catch (e) {
+      Get.snackbar('Error', 'Gagal memilih foto: $e', backgroundColor: Colors.red, colorText: Colors.white);
+    }
+  }
+
+  Future<void> pickPhotoFromCamera() async {
+    // Meminta izin kamera
+    final status = await Permission.camera.request();
+    if (status.isGranted) {
+      try {
+        final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+        if (image != null) {
+          photoPath.value = image.path;
+        }
+      } catch (e) {
+        Get.snackbar('Error', 'Gagal mengambil foto dari kamera: $e', backgroundColor: Colors.red, colorText: Colors.white);
+      }
+    } else {
       Get.snackbar(
-        'Gagal Memilih Foto',
-        'Gagal mengambil foto dari galeri: $e',
-        backgroundColor: Colors.red,
+        'Izin Ditolak',
+        'Anda harus memberikan izin kamera untuk mengambil foto langsung.',
+        backgroundColor: Colors.orange.shade700,
         colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
       );
     }
   }
@@ -74,6 +83,7 @@ class ReportFloodController extends GetxController {
 
     if (locationController.text.isEmpty ||
         heightController.text.isEmpty ||
+        selectedCategory.value == null ||
         situationController.text.isEmpty) {
       Get.snackbar(
         'Form Tidak Lengkap',
@@ -92,7 +102,7 @@ class ReportFloodController extends GetxController {
         'longitude': longitude.value != 0.0 ? longitude.value : 108.3248,
         'address': locationController.text,
         'description': situationController.text,
-        'category': categoryController.text,
+        'category': selectedCategory.value ?? 'genangan air',
         'height': int.tryParse(heightController.text) ?? 0,
       };
 

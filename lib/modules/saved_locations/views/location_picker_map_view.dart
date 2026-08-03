@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:flutter_map/flutter_map.dart' as fm;
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import '../../../core/theme/app_colors.dart';
 
 class LocationPickerMapController extends GetxController {
@@ -13,6 +14,7 @@ class LocationPickerMapController extends GetxController {
   ).obs; // Indramayu Center
   final RxString currentAddress = 'Menarik lokasi...'.obs;
   final RxBool isGeocoding = false.obs;
+  final fm.MapController mapController = fm.MapController();
 
   @override
   void onInit() {
@@ -81,6 +83,47 @@ class LocationPickerMapController extends GetxController {
     _debounce?.cancel();
     super.onClose();
   }
+
+  Future<void> goToCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      Get.snackbar('GPS Nonaktif', 'Silakan aktifkan layanan lokasi GPS Anda.');
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        Get.snackbar('Izin Ditolak', 'Izin lokasi tidak diberikan.');
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      Get.snackbar('Izin Ditolak', 'Izin lokasi ditolak secara permanen. Buka pengaturan aplikasi.');
+      return;
+    }
+
+    try {
+      isGeocoding.value = true;
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+      );
+      LatLng newPos = LatLng(position.latitude, position.longitude);
+      mapController.move(newPos, 16.0);
+      updateCenter(newPos);
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal mendapatkan lokasi saat ini.');
+    } finally {
+      isGeocoding.value = false;
+    }
+  }
 }
 
 class LocationPickerMapView extends StatelessWidget {
@@ -113,6 +156,7 @@ class LocationPickerMapView extends StatelessWidget {
         children: [
           // 1. OSM Map View
           fm.FlutterMap(
+            mapController: controller.mapController,
             options: fm.MapOptions(
               initialCenter: controller.currentCenter.value,
               initialZoom: 14.0,
@@ -146,6 +190,18 @@ class LocationPickerMapView extends StatelessWidget {
                 bottom: 36.0,
               ), // offset pin tip to point at center
               child: Icon(Icons.location_on, color: Colors.red, size: 40),
+            ),
+          ),
+
+          // Current Location FAB
+          Positioned(
+            bottom: 150,
+            right: 20,
+            child: FloatingActionButton(
+              heroTag: 'current_location_fab',
+              backgroundColor: Colors.white,
+              onPressed: controller.goToCurrentLocation,
+              child: const Icon(Icons.my_location, color: AppColors.primaryTeal),
             ),
           ),
 

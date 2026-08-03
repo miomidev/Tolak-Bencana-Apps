@@ -1,4 +1,4 @@
-package com.example.kaliwedi_apps
+package com.miomidev.kaliwedi
 
 import io.flutter.embedding.android.FlutterActivity
 

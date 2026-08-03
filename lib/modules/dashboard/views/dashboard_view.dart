@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/models/report_model.dart';
@@ -742,7 +743,7 @@ class ReportCard extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundImage: NetworkImage(avatar),
+                  backgroundImage: CachedNetworkImageProvider(avatar),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -809,12 +810,13 @@ class ReportCard extends StatelessWidget {
                     ? Stack(
                         fit: StackFit.expand,
                         children: [
-                          Image.network(
-                            resolveImageUrl(report.photoUrl),
+                          CachedNetworkImage(
+                            imageUrl: resolveImageUrl(report.photoUrl),
                             height: 160,
                             width: double.infinity,
                             fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => _buildMockGradientCard(report),
+                            placeholder: (context, url) => Container(color: Colors.grey.shade200),
+                            errorWidget: (context, url, error) => _buildMockGradientCard(report),
                           ),
                           _reportBadges(report),
                         ],

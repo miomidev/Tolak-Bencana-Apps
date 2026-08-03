@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide FormData, MultipartFile;
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:io';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/models/report_model.dart';
@@ -262,8 +263,13 @@ class _EditReportViewState extends State<EditReportView> {
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(11),
-                                child: Image.network(report.photoUrl!, fit: BoxFit.cover, width: double.infinity,
-                                    errorBuilder: (context, error, stackTrace) => _photoPlaceholder()),
+                                child: CachedNetworkImage(
+                                  imageUrl: report.photoUrl!,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  placeholder: (context, url) => Container(color: Colors.grey.shade200),
+                                  errorWidget: (context, url, error) => const Icon(Icons.broken_image),
+                                ),
                               ),
                               Positioned(
                                 bottom: 8, right: 8,
