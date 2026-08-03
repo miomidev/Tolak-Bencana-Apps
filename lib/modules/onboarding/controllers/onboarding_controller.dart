@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../routes/app_routes.dart';
 
 class OnboardingController extends GetxController {
@@ -44,11 +45,15 @@ class OnboardingController extends GetxController {
         curve: Curves.ease,
       );
     } else {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('has_seen_onboarding', true);
       Get.offAllNamed(Routes.login);
     }
   }
 
-  void skip() {
+  void skip() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('has_seen_onboarding', true);
     Get.offAllNamed(Routes.login);
   }
 

@@ -58,14 +58,11 @@ class NotificationService extends GetxService {
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
-    // Request permission (Android 13+)
-    await _plugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestNotificationsPermission();
-
     // Start polling if user is already logged in
-    _maybeStartPolling();
+    final isLoggedIn = await AuthService.isLoggedIn();
+    if (isLoggedIn) {
+      _maybeStartPolling();
+    }
 
     // React to login / logout events
     ever(AuthService.isLoggedInObs, (bool loggedIn) {

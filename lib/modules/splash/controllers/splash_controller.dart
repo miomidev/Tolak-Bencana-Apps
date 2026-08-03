@@ -1,4 +1,4 @@
-﻿import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import '../../../core/network/api_client.dart';
@@ -21,6 +21,7 @@ class SplashController extends GetxController {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
     final isGuest = prefs.getBool('is_guest') ?? false;
+    final hasSeenOnboarding = prefs.getBool('has_seen_onboarding') ?? false;
 
     // If user is in guest mode, go straight to main navigation
     if (isGuest) {
@@ -49,7 +50,11 @@ class SplashController extends GetxController {
         }
       }
     } else {
-      Get.offAllNamed(Routes.onboarding);
+      if (hasSeenOnboarding) {
+        Get.offAllNamed(Routes.login);
+      } else {
+        Get.offAllNamed(Routes.onboarding);
+      }
     }
   }
 }
