@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
@@ -24,12 +25,22 @@ class ReportFloodController extends GetxController {
 
   Future<void> pickPhotoFromGallery() async {
     try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 50, // Kompresi kuat
+        maxWidth: 1024,
+      );
       if (image != null) {
+        final file = File(image.path);
+        final sizeInMb = file.lengthSync() / (1024 * 1024);
+        if (sizeInMb > 2.0) {
+          Get.snackbar('Foto Terlalu Besar', 'Ukuran foto galeri kamu ${sizeInMb.toStringAsFixed(1)}MB. Harap pilih foto di bawah 2MB.', backgroundColor: Colors.red, colorText: Colors.white);
+          return;
+        }
         photoPath.value = image.path;
       }
     } catch (e) {
-      Get.snackbar('Error', 'Gagal memilih foto: $e', backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar('Error', 'Gagal memilih foto dari galeri: $e', backgroundColor: Colors.red, colorText: Colors.white);
     }
   }
 
@@ -40,10 +51,16 @@ class ReportFloodController extends GetxController {
       try {
         final XFile? image = await _picker.pickImage(
           source: ImageSource.camera,
-          imageQuality: 60,
-          maxWidth: 1200,
+          imageQuality: 50, // Kompresi kuat
+          maxWidth: 1024,
         );
         if (image != null) {
+          final file = File(image.path);
+          final sizeInMb = file.lengthSync() / (1024 * 1024);
+          if (sizeInMb > 2.0) {
+            Get.snackbar('File Terlalu Besar', 'Ukuran foto masih ${sizeInMb.toStringAsFixed(1)}MB setelah dikompres. Maksimal 2MB.', backgroundColor: Colors.red, colorText: Colors.white);
+            return;
+          }
           photoPath.value = image.path;
         }
       } catch (e) {
