@@ -76,14 +76,7 @@ class ReportFloodView extends GetView<ReportFloodController> {
                 ),
               ),
 
-              const SizedBox(height: 16),
 
-              // 2. Report Title
-              _buildLabel('Judul Laporan'),
-              _buildTextField(
-                controller: controller.titleController,
-                hintText: 'cth: Banjir setinggi lutut',
-              ),
 
               const SizedBox(height: 16),
 

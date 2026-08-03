@@ -195,7 +195,7 @@ class LocationPickerMapView extends StatelessWidget {
 
           // Current Location FAB
           Positioned(
-            bottom: 150,
+            top: 20,
             right: 20,
             child: FloatingActionButton(
               heroTag: 'current_location_fab',

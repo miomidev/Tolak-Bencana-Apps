@@ -12,7 +12,6 @@ class ReportFloodController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxString photoPath = ''.obs;
 
-  final titleController = TextEditingController();
   final locationController = TextEditingController();
   final heightController = TextEditingController();
   final RxnString selectedCategory = RxnString();
@@ -39,18 +38,22 @@ class ReportFloodController extends GetxController {
     final status = await Permission.camera.request();
     if (status.isGranted) {
       try {
-        final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+        final XFile? image = await _picker.pickImage(
+          source: ImageSource.camera,
+          imageQuality: 60,
+          maxWidth: 1200,
+        );
         if (image != null) {
           photoPath.value = image.path;
         }
       } catch (e) {
-        Get.snackbar('Error', 'Gagal mengambil foto dari kamera: $e', backgroundColor: Colors.red, colorText: Colors.white);
+        Get.snackbar('Error', 'Gagal membuka kamera: $e');
       }
     } else {
       Get.snackbar(
         'Izin Ditolak',
-        'Anda harus memberikan izin kamera untuk mengambil foto langsung.',
-        backgroundColor: Colors.orange.shade700,
+        'Aplikasi membutuhkan akses kamera untuk mengambil foto bukti.',
+        backgroundColor: Colors.orange,
         colorText: Colors.white,
       );
     }
@@ -138,9 +141,20 @@ class ReportFloodController extends GetxController {
         Get.back(); // return to previous view
       }
     } on dio.DioException catch (e) {
+      String errorMessage = 'Terjadi kesalahan server.';
+      if (e.response?.data != null) {
+        if (e.response!.data is Map && e.response!.data['message'] != null) {
+          errorMessage = e.response!.data['message'];
+        } else if (e.response!.data is String) {
+          errorMessage = e.response!.data.toString();
+          if (errorMessage.length > 50) {
+            errorMessage = '${errorMessage.substring(0, 50)}...';
+          }
+        }
+      }
       Get.snackbar(
         'Gagal Mengirim Laporan',
-        e.response?.data['message'] ?? 'Terjadi kesalahan server.',
+        errorMessage,
         backgroundColor: Colors.red,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,
