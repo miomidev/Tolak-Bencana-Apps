@@ -922,18 +922,25 @@ class _FloodAlertPanel extends StatelessWidget {
               AnimatedCrossFade(
                 duration: const Duration(milliseconds: 250),
                 crossFadeState: expanded ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                firstChild: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (alerts.isEmpty)
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                        child: Text('Tidak ada peringatan banjir saat ini.', style: TextStyle(color: Colors.grey, fontSize: 13)),
-                      )
-                    else
-                      ...alerts.map((a) => _AlertItem(alert: a)),
-                    const SizedBox(height: 8),
-                  ],
+                firstChild: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.4,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (alerts.isEmpty)
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                            child: Text('Tidak ada peringatan banjir saat ini.', style: TextStyle(color: Colors.grey, fontSize: 13)),
+                          )
+                        else
+                          ...alerts.map((a) => _AlertItem(alert: a)),
+                        const SizedBox(height: 8),
+                      ],
+                    ),
+                  ),
                 ),
                 secondChild: const SizedBox.shrink(),
               ),
