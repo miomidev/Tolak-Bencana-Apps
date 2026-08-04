@@ -1,9 +1,22 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'core/theme/app_colors.dart';
+import 'core/services/auth_service.dart';
+import 'core/services/notification_service.dart';
 import 'routes/app_pages.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialise auth state from SharedPreferences
+  await AuthService.init();
+
+  // Initialise notification service (registers as GetxService singleton)
+  await Get.putAsync<NotificationService>(
+    () => NotificationService().init(),
+    permanent: true,
+  );
+
   runApp(const MyApp());
 }
 

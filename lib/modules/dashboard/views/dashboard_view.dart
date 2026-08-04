@@ -1,10 +1,14 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/models/report_model.dart';
 import '../../../core/utils/image_helper.dart';
 import '../controllers/dashboard_controller.dart';
 import '../../main_navigation/controllers/main_navigation_controller.dart';
+import '../../../core/services/auth_service.dart';
+import '../../../routes/app_routes.dart';
 
 class DashboardView extends GetView<DashboardController> {
   const DashboardView({super.key});
@@ -16,6 +20,12 @@ class DashboardView extends GetView<DashboardController> {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundLight,
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 0,
+        backgroundColor: AppColors.primaryTeal,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+      ),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () => controller.fetchDashboardData(),
@@ -293,8 +303,17 @@ class DashboardView extends GetView<DashboardController> {
                         final report = controller.filteredReports[index];
                         return ReportCard(
                           report: report,
-                          onLike: () => controller.toggleLike(report),
-                          onComment: () => _showCommentsBottomSheet(context, report),
+                          onLike: () {
+                            if (AuthService.isGuestObs.value) {
+                              _showGuestLoginDialog();
+                              return;
+                            }
+                            controller.toggleLike(report);
+                          },
+                          onComment: () {
+                            // Guests can VIEW comments, just not submit
+                            _showCommentsBottomSheet(context, report);
+                          },
                         );
                       },
                       childCount: controller.filteredReports.length,
@@ -386,6 +405,42 @@ class DashboardView extends GetView<DashboardController> {
           ),
         ),
       ],
+    );
+  }
+
+  Future<void> _showGuestLoginDialog() async {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Row(
+          children: [
+            Icon(Icons.lock_outline, color: AppColors.primaryTeal),
+            SizedBox(width: 8),
+            Text('Perlu Login', style: TextStyle(fontSize: 16)),
+          ],
+        ),
+        content: const Text(
+          'Fitur ini hanya tersedia untuk pengguna yang sudah login.\n\nSilakan masuk atau daftar akun untuk melanjutkan.',
+          style: TextStyle(fontSize: 13, height: 1.5),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('Nanti', style: TextStyle(color: Colors.grey.shade600)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+              Get.toNamed(Routes.login);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryTeal,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            child: const Text('Masuk', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
     );
   }
 
@@ -517,39 +572,105 @@ class DashboardView extends GetView<DashboardController> {
                     }),
                   ),
                   const Divider(height: 1),
-                  // Text input
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    color: Colors.white,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: controller.commentTextController,
-                            decoration: InputDecoration(
-                              hintText: 'Tulis komentar...',
-                              hintStyle: const TextStyle(fontSize: 14),
-                              border: OutlineInputBorder(
+                  // Text input – guest sees a "login to comment" prompt instead
+                  Obx(() {
+                    final isGuest = AuthService.isGuestObs.value;
+                    if (isGuest) {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          color: Colors.white,
+                          child: InkWell(
+                            onTap: () {
+                              Get.back();
+                              Get.dialog(
+                                AlertDialog(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                  title: const Row(
+                                    children: [
+                                      Icon(Icons.lock_outline, color: AppColors.primaryTeal),
+                                      SizedBox(width: 8),
+                                      Text('Perlu Login', style: TextStyle(fontSize: 16)),
+                                    ],
+                                  ),
+                                  content: const Text(
+                                    'Untuk menulis komentar, silakan masuk atau daftar akun terlebih dahulu.',
+                                    style: TextStyle(fontSize: 13, height: 1.5),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Get.back(),
+                                      child: Text('Nanti', style: TextStyle(color: Colors.grey.shade600)),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Get.back();
+                                        Get.toNamed(Routes.login);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.primaryTeal,
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                      ),
+                                      child: const Text('Masuk', style: TextStyle(color: Colors.white)),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade100,
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: Colors.grey.shade300),
+                                border: Border.all(color: Colors.grey.shade300),
                               ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.lock_outline, size: 16, color: Colors.grey.shade500),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Login untuk menulis komentar...',
+                                    style: TextStyle(fontSize: 13, color: Colors.grey.shade500),
+                                  ),
+                                ],
                               ),
-                              fillColor: Colors.grey.shade100,
-                              filled: true,
                             ),
-                            maxLines: null,
                           ),
+                        );
+                      }
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        color: Colors.white,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: controller.commentTextController,
+                                decoration: InputDecoration(
+                                  hintText: 'Tulis komentar...',
+                                  hintStyle: const TextStyle(fontSize: 14),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide(color: Colors.grey.shade300),
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8,
+                                  ),
+                                  fillColor: Colors.grey.shade100,
+                                  filled: true,
+                                ),
+                                maxLines: null,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            IconButton(
+                              icon: const Icon(Icons.send, color: AppColors.primaryTeal),
+                              onPressed: () => controller.addComment(report),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 8),
-                        IconButton(
-                          icon: const Icon(Icons.send, color: AppColors.primaryTeal),
-                          onPressed: () => controller.addComment(report),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ],
               );
@@ -622,7 +743,7 @@ class ReportCard extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundImage: NetworkImage(avatar),
+                  backgroundImage: CachedNetworkImageProvider(avatar),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -689,12 +810,13 @@ class ReportCard extends StatelessWidget {
                     ? Stack(
                         fit: StackFit.expand,
                         children: [
-                          Image.network(
-                            resolveImageUrl(report.photoUrl),
+                          CachedNetworkImage(
+                            imageUrl: resolveImageUrl(report.photoUrl),
                             height: 160,
                             width: double.infinity,
                             fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => _buildMockGradientCard(report),
+                            placeholder: (context, url) => Container(color: Colors.grey.shade200),
+                            errorWidget: (context, url, error) => _buildMockGradientCard(report),
                           ),
                           _reportBadges(report),
                         ],

@@ -1,9 +1,10 @@
-﻿import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../core/network/api_client.dart';
-import '../../../core/theme/app_colors.dart';
 import '../../../routes/app_routes.dart';
 import '../../dashboard/controllers/dashboard_controller.dart';
 import '../../main_navigation/controllers/main_navigation_controller.dart';
@@ -12,10 +13,9 @@ class ReportFloodController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxString photoPath = ''.obs;
 
-  final titleController = TextEditingController();
   final locationController = TextEditingController();
   final heightController = TextEditingController();
-  final categoryController = TextEditingController(text: 'genangan air');
+  final RxnString selectedCategory = RxnString();
   final situationController = TextEditingController();
 
   final RxDouble latitude = 0.0.obs;
@@ -25,24 +25,53 @@ class ReportFloodController extends GetxController {
 
   Future<void> pickPhotoFromGallery() async {
     try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 50, // Kompresi kuat
+        maxWidth: 1024,
+      );
       if (image != null) {
+        final file = File(image.path);
+        final sizeInMb = file.lengthSync() / (1024 * 1024);
+        if (sizeInMb > 2.0) {
+          Get.snackbar('Foto Terlalu Besar', 'Ukuran foto galeri kamu ${sizeInMb.toStringAsFixed(1)}MB. Harap pilih foto di bawah 2MB.', backgroundColor: Colors.red, colorText: Colors.white);
+          return;
+        }
         photoPath.value = image.path;
-        Get.snackbar(
-          'Foto Berhasil Dipilih',
-          'Foto bukti berhasil diambil dari galeri!',
-          backgroundColor: AppColors.primaryTeal,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-        );
       }
     } catch (e) {
+      Get.snackbar('Error', 'Gagal memilih foto dari galeri: $e', backgroundColor: Colors.red, colorText: Colors.white);
+    }
+  }
+
+  Future<void> pickPhotoFromCamera() async {
+    // Meminta izin kamera
+    final status = await Permission.camera.request();
+    if (status.isGranted) {
+      try {
+        final XFile? image = await _picker.pickImage(
+          source: ImageSource.camera,
+          imageQuality: 50, // Kompresi kuat
+          maxWidth: 1024,
+        );
+        if (image != null) {
+          final file = File(image.path);
+          final sizeInMb = file.lengthSync() / (1024 * 1024);
+          if (sizeInMb > 2.0) {
+            Get.snackbar('File Terlalu Besar', 'Ukuran foto masih ${sizeInMb.toStringAsFixed(1)}MB setelah dikompres. Maksimal 2MB.', backgroundColor: Colors.red, colorText: Colors.white);
+            return;
+          }
+          photoPath.value = image.path;
+        }
+      } catch (e) {
+        Get.snackbar('Error', 'Gagal membuka kamera: $e');
+      }
+    } else {
       Get.snackbar(
-        'Gagal Memilih Foto',
-        'Gagal mengambil foto dari galeri: $e',
-        backgroundColor: Colors.red,
+        'Izin Ditolak',
+        'Aplikasi membutuhkan akses kamera untuk mengambil foto bukti.',
+        backgroundColor: Colors.orange,
         colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
       );
     }
   }
@@ -74,6 +103,7 @@ class ReportFloodController extends GetxController {
 
     if (locationController.text.isEmpty ||
         heightController.text.isEmpty ||
+        selectedCategory.value == null ||
         situationController.text.isEmpty) {
       Get.snackbar(
         'Form Tidak Lengkap',
@@ -92,7 +122,7 @@ class ReportFloodController extends GetxController {
         'longitude': longitude.value != 0.0 ? longitude.value : 108.3248,
         'address': locationController.text,
         'description': situationController.text,
-        'category': categoryController.text,
+        'category': selectedCategory.value ?? 'genangan air',
         'height': int.tryParse(heightController.text) ?? 0,
       };
 
@@ -128,9 +158,20 @@ class ReportFloodController extends GetxController {
         Get.back(); // return to previous view
       }
     } on dio.DioException catch (e) {
+      String errorMessage = 'Terjadi kesalahan server.';
+      if (e.response?.data != null) {
+        if (e.response!.data is Map && e.response!.data['message'] != null) {
+          errorMessage = e.response!.data['message'];
+        } else if (e.response!.data is String) {
+          errorMessage = e.response!.data.toString();
+          if (errorMessage.length > 50) {
+            errorMessage = '${errorMessage.substring(0, 50)}...';
+          }
+        }
+      }
       Get.snackbar(
         'Gagal Mengirim Laporan',
-        e.response?.data['message'] ?? 'Terjadi kesalahan server.',
+        errorMessage,
         backgroundColor: Colors.red,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,

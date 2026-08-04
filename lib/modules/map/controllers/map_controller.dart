@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,15 +11,17 @@ import '../../../core/models/shelter_model.dart';
 // â”€â”€ Map filter state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 enum MapFilter { banjir, posAir, aman }
 
-// â”€â”€ Selected location popup model â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ————————————————————————————————————————————————
 class MapPopupData {
   final String title;
   final String statusLabel;   // e.g. "BANJIR", "AMAN", "WASPADA"
   final String statusLevel;   // e.g. "kritis", "waspada", "pantau", "aman"
-  final String waterLevel;    // e.g. "50â€“80 CM"  (empty if aman)
+  final String waterLevel;    // e.g. "50–80 CM"  (empty if aman)
   final String description;
   final bool canReport;       // show Tambah Laporan button
   final bool canViewAlert;    // show Lihat Info Bencana button
+  final double? latitude;
+  final double? longitude;
 
   const MapPopupData({
     required this.title,
@@ -29,10 +31,12 @@ class MapPopupData {
     this.description = '',
     this.canReport = false,
     this.canViewAlert = false,
+    this.latitude,
+    this.longitude,
   });
 }
 
-// â”€â”€ Flood alert model for bottom panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ————————————————————————————————————————————————
 class FloodAlert {
   final String location;
   final String level;        // kritis | waspada | pantau
@@ -51,6 +55,7 @@ class MapController extends GetxController {
   // â”€â”€ Location â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   final RxDouble currentLat = (-6.3262).obs;
   final RxDouble currentLng = (108.3243).obs;
+  final RxDouble currentZoom = 13.0.obs;
   final RxBool isLoadingLocation = false.obs;
   final RxBool isLoadingMarkers = false.obs;
   StreamSubscription<Position>? _positionSubscription;

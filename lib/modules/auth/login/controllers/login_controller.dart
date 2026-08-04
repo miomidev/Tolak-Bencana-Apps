@@ -1,9 +1,9 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../core/network/api_client.dart';
+import '../../../../core/services/auth_service.dart';
 
 class LoginController extends GetxController {
   final emailController = TextEditingController();
@@ -45,11 +45,10 @@ class LoginController extends GetxController {
 
       if (response.statusCode == 200) {
         final data = response.data;
-        final token = data['access_token'];
+        final token = data['access_token'] as String;
 
-        // Save token
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('auth_token', token);
+        // Save token AND clear guest flag via AuthService
+        await AuthService.setLoggedIn(token);
 
         Get.snackbar('Sukses', 'Login berhasil',
             snackPosition: SnackPosition.BOTTOM,
@@ -85,12 +84,29 @@ class LoginController extends GetxController {
         snackPosition: SnackPosition.BOTTOM);
   }
 
+  Future<void> loginAsGuest() async {
+    await AuthService.setGuestMode();
+    Get.offAllNamed(Routes.mainNavigation);
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Get.snackbar(
+        'Mode Tamu Aktif',
+        'Anda masuk sebagai tamu. Beberapa fitur tidak tersedia.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: const Color(0xFF0D9488),
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+      );
+    });
+  }
+
   void goToRegister() {
     Get.toNamed(Routes.register);
   }
 
   @override
   void onClose() {
+    emailController.removeListener(_validateForm);
+    passwordController.removeListener(_validateForm);
     emailController.dispose();
     passwordController.dispose();
     super.onClose();

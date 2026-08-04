@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
@@ -39,7 +39,7 @@ class ReportFloodView extends GetView<ReportFloodController> {
               ),
               const SizedBox(height: 8),
               GestureDetector(
-                onTap: controller.pickPhotoFromGallery,
+                onTap: () => _showPhotoPickerBottomSheet(context, controller),
                 child: Container(
                   height: 120,
                   width: double.infinity,
@@ -56,12 +56,12 @@ class ReportFloodView extends GetView<ReportFloodController> {
                       ? const Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.camera_alt_outlined, size: 28, color: Colors.black38),
-                            SizedBox(height: 6),
-                            Text(
-                              'Ketuk untuk upload foto',
-                              style: TextStyle(fontSize: 12, color: Colors.black45),
-                            ),
+                              Icon(Icons.add_a_photo_outlined, size: 32, color: Colors.black38),
+                              SizedBox(height: 8),
+                              Text(
+                                'Ambil atau Pilih Foto Bukti',
+                                style: TextStyle(fontSize: 13, color: Colors.black54, fontWeight: FontWeight.w500),
+                              ),
                           ],
                         )
                       : ClipRRect(
@@ -76,14 +76,7 @@ class ReportFloodView extends GetView<ReportFloodController> {
                 ),
               ),
 
-              const SizedBox(height: 16),
 
-              // 2. Report Title
-              _buildLabel('Judul Laporan'),
-              _buildTextField(
-                controller: controller.titleController,
-                hintText: 'cth: Banjir setinggi lutut',
-              ),
 
               const SizedBox(height: 16),
 
@@ -102,30 +95,49 @@ class ReportFloodView extends GetView<ReportFloodController> {
 
               const SizedBox(height: 16),
 
-              // 4. Water Height
-              _buildLabel('Tinggi air (cm)'),
+              _buildLabel('Perkiraan Tinggi Air (cm)'),
               _buildTextField(
                 controller: controller.heightController,
-                hintText: 'cm',
+                hintText: 'Contoh: 50',
                 keyboardType: TextInputType.number,
+                prefixIcon: const Icon(Icons.height, color: Colors.black38),
               ),
 
               const SizedBox(height: 16),
 
-              // 5. Flood Category
-              _buildLabel('kategori banjir'),
-              _buildTextField(
-                controller: controller.categoryController,
-                hintText: 'genangan air',
+              // 5. Flood Category Dropdown
+              _buildLabel('Kategori Banjir'),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey.shade200),
+                ),
+                child: DropdownButtonFormField<String>(
+                  initialValue: controller.selectedCategory.value,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    prefixIcon: Icon(Icons.water_drop_outlined, color: Colors.black38),
+                  ),
+                  hint: const Text('Pilih kategori banjir', style: TextStyle(color: Colors.black38, fontSize: 13)),
+                  items: ['genangan air', 'banjir sedang', 'banjir bandang']
+                      .map((category) => DropdownMenuItem(
+                            value: category,
+                            child: Text(category, style: const TextStyle(fontSize: 14)),
+                          ))
+                      .toList(),
+                  onChanged: (value) => controller.selectedCategory.value = value,
+                ),
               ),
 
               const SizedBox(height: 16),
 
               // 6. Situation Detail
-              _buildLabel('ceritakan situasinya'),
+              _buildLabel('Ceritakan Situasinya'),
               _buildTextField(
                 controller: controller.situationController,
-                hintText: 'kondisi terkini',
+                hintText: 'Deskripsikan kondisi terkini, misal: Air merendam separuh ban motor...',
                 maxLines: 3,
               ),
 
@@ -161,6 +173,37 @@ class ReportFloodView extends GetView<ReportFloodController> {
           ),
         );
       }),
+    );
+  }
+
+  void _showPhotoPickerBottomSheet(BuildContext context, ReportFloodController controller) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (BuildContext bc) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Ambil dari Kamera'),
+                onTap: () {
+                  controller.pickPhotoFromCamera();
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Pilih dari Galeri'),
+                onTap: () {
+                  controller.pickPhotoFromGallery();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
