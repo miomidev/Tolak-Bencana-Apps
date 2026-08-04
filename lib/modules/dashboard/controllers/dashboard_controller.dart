@@ -6,9 +6,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:kaliwedi_apps/core/theme/app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/network/api_client.dart';
+import '../../../core/services/deep_link_service.dart';
 import '../../../core/models/report_model.dart';
 import '../../../core/models/comment_model.dart';
 import '../../../core/models/dashboard_stats_model.dart';
+import '../../../routes/app_routes.dart';
 
 class DashboardController extends GetxController {
   final RxBool isLoading = false.obs;
@@ -23,7 +25,13 @@ class DashboardController extends GetxController {
   final RxString searchQuery = ''.obs;
   final RxBool isOffline = false.obs;
 
+  // Report id that should stay pinned at the top of the feed
+  // (set when the app is opened from a shared/deep link).
+  final RxnString pinnedReportId = RxnString();
+
   final commentTextController = TextEditingController();
+
+  bool _handledInitialDeepLink = false;
 
   void toggleOfflineMode() {
     isOffline.value = !isOffline.value;
@@ -153,6 +161,51 @@ class DashboardController extends GetxController {
       }
     } finally {
       isLoading.value = false;
+      if (!_handledInitialDeepLink) {
+        _handledInitialDeepLink = true;
+        handleSharedReport();
+      }
+    }
+  }
+
+  /// Opens the report that came from a shared/deep link and pins it
+  /// at the top of the feed.
+  Future<void> handleSharedReport() async {
+    final reportId = DeepLinkService.to.pendingReportId.value;
+    if (reportId == null || reportId.isEmpty) return;
+    DeepLinkService.to.pendingReportId.value = null;
+
+    pinnedReportId.value = reportId;
+
+    ReportModel? report;
+    try {
+      report = allReports.firstWhere((r) => r.id == reportId);
+    } catch (_) {
+      report = null;
+    }
+
+    if (report == null) {
+      try {
+        final response = await ApiClient.dio.get('/reports/$reportId');
+        report = ReportModel.fromJson(response.data['report'] as Map<String, dynamic>);
+        allReports.insert(0, report);
+      } catch (_) {
+        pinnedReportId.value = null;
+        Get.snackbar(
+          'Gagal Memuat Laporan',
+          'Laporan yang dibagikan tidak dapat ditemukan.',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return;
+      }
+    }
+
+    applyFiltersAndSort();
+
+    if (Get.currentRoute != Routes.reportDetail) {
+      Get.toNamed(Routes.reportDetail, arguments: report);
     }
   }
 
@@ -184,6 +237,16 @@ class DashboardController extends GetxController {
       });
     } else if (sortBy.value == 'Terdekat') {
       // Fallback if location not ready yet, keep original
+    }
+
+    // Keep the shared/deep-linked report pinned at the very top
+    final pinnedId = pinnedReportId.value;
+    if (pinnedId != null) {
+      final idx = result.indexWhere((r) => r.id == pinnedId);
+      if (idx > 0) {
+        final pinned = result.removeAt(idx);
+        result.insert(0, pinned);
+      }
     }
 
     filteredReports.assignAll(result);

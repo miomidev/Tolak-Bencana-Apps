@@ -10,6 +10,8 @@ class ReportDetailView extends GetView<ReportDetailController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.applyArguments(Get.arguments);
+
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F9),
       appBar: AppBar(
@@ -51,6 +53,9 @@ class ReportDetailView extends GetView<ReportDetailController> {
       ),
       body: Obx(() {
         final report = controller.report.value;
+        if (controller.isLoading.value && report == null) {
+          return const Center(child: CircularProgressIndicator());
+        }
         if (report == null) {
           return const Center(child: Text('Laporan tidak ditemukan'));
         }

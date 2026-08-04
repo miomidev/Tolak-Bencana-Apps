@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/config/app_config.dart';
 import '../../../core/models/report_model.dart';
 import '../../../core/utils/image_helper.dart';
 import '../controllers/dashboard_controller.dart';
@@ -303,6 +305,7 @@ class DashboardView extends GetView<DashboardController> {
                         final report = controller.filteredReports[index];
                         return ReportCard(
                           report: report,
+                          onTap: () => Get.toNamed(Routes.reportDetail, arguments: report),
                           onLike: () {
                             if (AuthService.isGuestObs.value) {
                               _showGuestLoginDialog();
@@ -709,13 +712,34 @@ class ReportCard extends StatelessWidget {
   final ReportModel report;
   final VoidCallback onLike;
   final VoidCallback onComment;
+  final VoidCallback? onTap;
 
   const ReportCard({
     super.key,
     required this.report,
     required this.onLike,
     required this.onComment,
+    this.onTap,
   });
+
+  Future<void> _shareReport(ReportModel report) async {
+    final origin = AppConfig.baseUrl.replaceAll(RegExp(r'/api/?$'), '');
+    final link = '$origin/report/${report.id}';
+
+    try {
+      await SharePlus.instance.share(
+        ShareParams(text: link, subject: 'Laporan Banjir KALIWEDI'),
+      );
+    } catch (_) {
+      Get.snackbar(
+        'Gagal Membagikan',
+        'Tidak dapat membuka menu berbagi.',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -728,13 +752,16 @@ class ReportCard extends StatelessWidget {
       elevation: 0,
       color: Colors.white,
       margin: const EdgeInsets.only(bottom: 16),
+      clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(color: Colors.grey.shade200),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // User Header Info
@@ -905,20 +932,12 @@ class ReportCard extends StatelessWidget {
                 // Share action
                 IconButton(
                   icon: Icon(Icons.share_outlined, color: Colors.grey.shade500, size: 19),
-                  onPressed: () {
-                    // Trigger simple sharing dialogue simulation
-                    Get.snackbar(
-                      'Bagikan Laporan',
-                      'Tautan laporan berhasil disalin!',
-                      backgroundColor: AppColors.primaryTeal,
-                      colorText: Colors.white,
-                      snackPosition: SnackPosition.BOTTOM,
-                    );
-                  },
+                  onPressed: () => _shareReport(report),
                 ),
               ],
             ),
           ],
+          ),
         ),
       ),
     );
