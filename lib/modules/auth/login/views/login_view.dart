@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -10,8 +11,14 @@ class LoginView extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primaryTeal,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light, // Android: white icons
+        statusBarBrightness: Brightness.dark, // iOS: white icons
+      ),
+      child: Scaffold(
+        backgroundColor: AppColors.primaryTeal,
       body: SafeArea(
         bottom: false,
         child: Column(
@@ -305,6 +312,6 @@ class LoginView extends GetView<LoginController> {
           ],
         ),
       ),
-    );
+    ));
   }
 }

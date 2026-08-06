@@ -1,4 +1,5 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../controllers/splash_controller.dart';
@@ -11,8 +12,14 @@ class SplashView extends GetView<SplashController> {
     // Instantiate controller if not using bindings
     Get.put(SplashController());
 
-    return Scaffold(
-      backgroundColor: AppColors.primaryTeal,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+      child: Scaffold(
+        backgroundColor: AppColors.primaryTeal,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -27,6 +34,6 @@ class SplashView extends GetView<SplashController> {
           ],
         ),
       ),
-    );
+    ));
   }
 }
