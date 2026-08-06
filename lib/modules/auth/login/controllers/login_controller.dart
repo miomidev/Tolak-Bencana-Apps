@@ -83,7 +83,7 @@ class LoginController extends GetxController {
   final _googleSignIn = GoogleSignIn(
     scopes: ['email', 'profile'],
     // Web Client ID dari Google Cloud Console (OAuth 2.0 Web application)
-    serverClientId: '192572861773-vhvm24fd41798j8e4j50gt45v8ts8t7q.apps.googleusercontent.com',
+    serverClientId: '192572861773-qfpnedaikjredjpskhd4pofuibg2ivd8.apps.googleusercontent.com',
   );
 
   Future<void> loginWithGoogle() async {
@@ -99,9 +99,9 @@ class LoginController extends GetxController {
       }
 
       final googleAuth = await googleUser.authentication;
-      final idToken = googleAuth.idToken;
+      final tokenToSend = googleAuth.accessToken; // Socialite requires Access Token
 
-      if (idToken == null) {
+      if (tokenToSend == null) {
         Get.snackbar(
           'Gagal',
           'Tidak dapat mendapatkan token Google. Coba lagi.',
@@ -112,10 +112,10 @@ class LoginController extends GetxController {
         return;
       }
 
-      // Send ID token to backend for verification
+      // Send token to backend for verification
       final response = await ApiClient.dio.post(
         '/auth/google',
-        data: {'id_token': idToken},
+        data: {'id_token': tokenToSend},
       );
 
       if (response.statusCode == 200) {
