@@ -51,7 +51,7 @@ class RegisterView extends GetView<RegisterController> {
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    'Bergabung dan pantau banjir di indramayu',
+                    'Bergabung dan pantau informasi bencana di sekitar Anda',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
@@ -141,7 +141,7 @@ class RegisterView extends GetView<RegisterController> {
                                 style: const TextStyle(color: AppColors.primaryTeal, fontWeight: FontWeight.bold),
                                 recognizer: TapGestureRecognizer()..onTap = () {},
                               ),
-                              const TextSpan(text: '\nKALIWEDI.'),
+                              const TextSpan(text: '\nTOLAK BENCANA.'),
                             ],
                           ),
                         ),

@@ -1,4 +1,4 @@
-package com.miomidev.kaliwedi
+package com.miomidevtb
 
 import io.flutter.embedding.android.FlutterActivity
 

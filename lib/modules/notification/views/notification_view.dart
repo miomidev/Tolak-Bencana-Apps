@@ -435,7 +435,7 @@ class NotificationView extends GetView<NotificationController> {
                         ),
                         const SizedBox(height: 4),
                         const Text(
-                          'Pusat Siaga & Informasi Kaliwedi',
+                          'Pusat Siaga & Informasi Tolak Bencana',
                           style: TextStyle(
                             fontSize: 11.5,
                             color: Color(0xFF64748B),

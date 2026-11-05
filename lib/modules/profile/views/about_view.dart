@@ -108,7 +108,7 @@ class _AboutViewState extends State<AboutView> {
                           const SizedBox(height: 16),
 
                           Text(
-                            _appInfo?.appName ?? 'Kaliwedi',
+                            _appInfo?.appName ?? 'Tolak Bencana (TB)',
                             style: const TextStyle(
                               fontSize: 26,
                               fontWeight: FontWeight.bold,

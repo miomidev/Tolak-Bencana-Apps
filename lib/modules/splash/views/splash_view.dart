@@ -19,21 +19,32 @@ class SplashView extends GetView<SplashController> {
         statusBarBrightness: Brightness.dark,
       ),
       child: Scaffold(
-        backgroundColor: AppColors.primaryTeal,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Logo
-            Image.asset(
-              'assets/images/logo.png',
-              width: 169, // based on original SVG width/height ratio if needed, but it's 720x951
-              height: 223,
-              fit: BoxFit.contain,
-            ),
-          ],
+        backgroundColor: AppColors.primaryGreen,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Logo
+              Image.asset(
+                'assets/images/logo.png',
+                width: 180,
+                height: 180,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Tolak Bencana',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    ));
+      ),);
   }
 }

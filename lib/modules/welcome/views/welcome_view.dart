@@ -1,7 +1,6 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/logo_painter.dart';
 import '../../../routes/app_routes.dart';
 
 class WelcomeView extends StatelessWidget {
@@ -20,20 +19,25 @@ class WelcomeView extends StatelessWidget {
               const Spacer(flex: 2),
 
               // Logo & App Name
-              const KaliwediLogo(size: 140.0),
-              const SizedBox(height: 32.0),
+              Image.asset(
+                'assets/images/logo.png',
+                width: 130,
+                height: 130,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(height: 24.0),
               const Text(
-                'KALIWEDI',
+                'TOLAK BENCANA',
                 style: TextStyle(
-                  fontSize: 28.0,
+                  fontSize: 26.0,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primaryTeal,
+                  color: AppColors.primaryGreen,
                   letterSpacing: 2.0,
                 ),
               ),
               const SizedBox(height: 12.0),
               Text(
-                'Sistem Informasi & Laporan Banjir',
+                'Sistem Informasi & Tanggap Bencana',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14.0,
@@ -46,7 +50,7 @@ class WelcomeView extends StatelessWidget {
 
               // Welcome Text Description
               const Text(
-                'Mulai pantau kondisi genangan air di sekitar Anda secara real-time dan laporkan titik banjir untuk membantu sesama.',
+                'Pantau situasi bencana di sekitar Anda secara real-time dan laporkan kejadian bencana untuk keselamatan bersama.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14.0,

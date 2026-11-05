@@ -493,7 +493,7 @@ class _TealHeader extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'PELAPORAN BANJIR',
+                        'TANGGAP BENCANA',
                         style: TextStyle(
                           fontSize: 8.5,
                           fontWeight: FontWeight.bold,
@@ -502,7 +502,7 @@ class _TealHeader extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'KALIWEDI',
+                        'TOLAK BENCANA',
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w900,

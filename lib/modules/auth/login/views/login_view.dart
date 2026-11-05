@@ -59,7 +59,7 @@ class LoginView extends GetView<LoginController> {
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    'Masuk untuk memantau banjir dan mengirim laporan',
+                    'Masuk untuk memantau situasi dan melaporkan bencana',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,

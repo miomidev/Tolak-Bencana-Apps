@@ -65,7 +65,7 @@ class DashboardView extends GetView<DashboardController> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'PELAPORAN BANJIR',
+                                    'TANGGAP BENCANA',
                                     style: TextStyle(
                                       fontSize: 8.5,
                                       fontWeight: FontWeight.bold,
@@ -74,7 +74,7 @@ class DashboardView extends GetView<DashboardController> {
                                     ),
                                   ),
                                   Text(
-                                    'KALIWEDI',
+                                    'TOLAK BENCANA',
                                     style: TextStyle(
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.w900,
@@ -169,7 +169,7 @@ class DashboardView extends GetView<DashboardController> {
                         child: TextField(
                           onChanged: controller.updateSearchQuery,
                           decoration: const InputDecoration(
-                            hintText: 'Cari laporan banjir...',
+                            hintText: 'Cari laporan bencana...',
                             hintStyle: TextStyle(color: Colors.black38, fontSize: 14),
                             prefixIcon: Icon(Icons.search, color: Colors.black45),
                             border: InputBorder.none,
@@ -728,7 +728,7 @@ class ReportCard extends StatelessWidget {
 
     try {
       await SharePlus.instance.share(
-        ShareParams(text: link, subject: 'Laporan Banjir KALIWEDI'),
+        ShareParams(text: link, subject: 'Laporan Tolak Bencana'),
       );
     } catch (_) {
       Get.snackbar(

@@ -31,7 +31,7 @@ class NotificationService extends GetxService {
   static const _channelId = 'kaliwedi_broadcast';
   static const _channelName = 'Siaran Peringatan';
   static const _channelDesc =
-      'Notifikasi siaran peringatan banjir dari admin KALIWEDI';
+      'Notifikasi siaran peringatan bencana dari admin Tolak Bencana';
 
   // ── Initialise ────────────────────────────────────────────────────────────
   Future<NotificationService> init() async {

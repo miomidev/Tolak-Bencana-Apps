@@ -453,7 +453,7 @@ class _GuestProfilePrompt extends StatelessWidget {
                 // Feature list
                 _FeatureRow(icon: Icons.person_outline, label: 'Edit profil & foto'),
                 const SizedBox(height: 8),
-                _FeatureRow(icon: Icons.assignment_outlined, label: 'Riwayat laporan banjir'),
+                _FeatureRow(icon: Icons.assignment_outlined, label: 'Riwayat laporan bencana'),
                 const SizedBox(height: 8),
                 _FeatureRow(icon: Icons.place_outlined, label: 'Simpan lokasi favorit'),
                 const SizedBox(height: 8),

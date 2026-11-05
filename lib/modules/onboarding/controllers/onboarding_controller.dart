@@ -10,13 +10,13 @@ class OnboardingController extends GetxController {
 
   final List<Map<String, String>> onboardingData = [
     {
-      "title": "Laporkan titik banjir dengan GPS",
-      "description": "Tandai lokasi banjir secara real-time dengan GPS akurat",
+      "title": "Laporkan titik bencana dengan GPS",
+      "description": "Tandai lokasi bencana secara real-time dengan GPS akurat",
       "image": "assets/images/gps_logo.svg"
     },
     {
       "title": "Dapatkan notifikasi peringatan dini",
-      "description": "Terima alert ketika ada potensi banjir di wilayahmu",
+      "description": "Terima alert ketika ada potensi bencana di wilayahmu",
       "image": "assets/images/bell_logo.svg"
     },
     {
