@@ -22,4 +22,9 @@ class AppColors {
   static const Color white = Colors.white;
   static const Color textDark = Color(0xFF1F2937);
   static const Color textLight = Color(0xFF9CA3AF);
+
+  // Aliases for compatibility with existing views
+  static const Color primaryTeal = primaryBlue;
+  static const Color softTeal = primaryBlueSubtle;
+  static const Color primaryGreen = primaryBlue;
 }
