@@ -48,7 +48,7 @@ class DeepLinkService extends GetxService {
 
   /// Parses `kaliwedi://report/{id}` or `https://.../report/{id}`.
   String? _extractReportId(Uri uri) {
-    if (uri.scheme == 'kaliwedi' && uri.host == 'report') {
+    if ((uri.scheme == 'kaliwedi' || uri.scheme == 'tolakbencana') && uri.host == 'report') {
       return uri.pathSegments.isNotEmpty ? uri.pathSegments.first : null;
     }
 

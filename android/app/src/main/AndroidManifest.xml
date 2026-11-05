@@ -36,6 +36,7 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="tolakbencana" android:host="report"/>
                 <data android:scheme="kaliwedi" android:host="report"/>
             </intent-filter>
         </activity>
