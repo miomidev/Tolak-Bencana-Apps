@@ -37,7 +37,7 @@ class LogoutView extends GetView<ProfileController> {
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Obx(() {
-          final username = controller.currentUser.value?.username ?? 'kaliwedi';
+          final username = controller.currentUser.value?.username ?? 'Pengguna';
           
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,

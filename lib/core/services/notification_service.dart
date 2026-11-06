@@ -28,7 +28,7 @@ class NotificationService extends GetxService {
   Timer? _pollTimer;
 
   // ── Android notification channel ─────────────────────────────────────────
-  static const _channelId = 'kaliwedi_broadcast';
+  static const _channelId = 'tolakbencana_broadcast';
   static const _channelName = 'Siaran Peringatan';
   static const _channelDesc =
       'Notifikasi siaran peringatan bencana dari admin Tolak Bencana';

@@ -25,7 +25,7 @@ class ProfileView extends GetView<ProfileController> {
         final user = controller.currentUser.value;
         final avatar = () {
           final url = resolveImageUrl(user?.avatarUrl);
-          return url.isNotEmpty ? url : 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user?.name ?? "kaliwedi")}&background=0D8ABC&color=fff';
+          return url.isNotEmpty ? url : 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(user?.name ?? "User")}&background=0D8ABC&color=fff';
         }();
 
         return SingleChildScrollView(
@@ -65,7 +65,7 @@ class ProfileView extends GetView<ProfileController> {
                     const SizedBox(height: 16),
                     // Name
                     Text(
-                      user?.name ?? 'kaliwedi',
+                      user?.name ?? 'Pengguna',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -75,7 +75,7 @@ class ProfileView extends GetView<ProfileController> {
                     const SizedBox(height: 4),
                     // Username/Email
                     Text(
-                      '${user?.username ?? "kaliwedi"}@email.com',
+                      user?.email ?? '${user?.username ?? "pengguna"}@email.com',
                       style: TextStyle(
                         fontSize: 13,
                         color: Colors.white.withValues(alpha: 0.8),

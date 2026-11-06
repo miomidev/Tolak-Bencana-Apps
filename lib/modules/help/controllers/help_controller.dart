@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/models/help_model.dart';
@@ -36,8 +36,8 @@ class HelpController extends GetxController {
       // Offline fallback
       contacts.assignAll([
         const HelpContactModel(id: 1, type: 'phone', title: 'Telepon', value: '0800-1234-5678 (Gratis)', icon: 'phone'),
-        const HelpContactModel(id: 2, type: 'email', title: 'Email', value: 'bantuan@kaliwedi.id', icon: 'email'),
-        const HelpContactModel(id: 3, type: 'website', title: 'Website Resmi', value: 'kaliwedi.indramayu.go.id', icon: 'website'),
+        const HelpContactModel(id: 2, type: 'email', title: 'Email', value: 'bantuan@tolakbencana.id', icon: 'email'),
+        const HelpContactModel(id: 3, type: 'website', title: 'Website Resmi', value: 'tolak-bencana.miomidev.com', icon: 'website'),
       ]);
       faqs.assignAll([
         const FaqModel(id: 1, question: 'Bagaimana cara membuat laporan baru?', answer: "Buka halaman Beranda, lalu ketuk tombol '+' untuk membuat laporan baru. Isi detail masalah, foto, dan lokasi, kemudian kirim."),

@@ -8,7 +8,7 @@ class LogoutSuccessView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final username = Get.arguments as String? ?? 'kaliwedi';
+    final username = Get.arguments as String? ?? 'Pengguna';
 
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F9),

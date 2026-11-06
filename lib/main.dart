@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'KALIWEDI Apps',
+      title: 'Tolak Bencana',
       theme: ThemeData(
         primaryColor: AppColors.primaryBlue,
         colorScheme: ColorScheme.fromSeed(
