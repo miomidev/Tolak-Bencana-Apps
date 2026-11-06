@@ -268,7 +268,7 @@ class ReportDetailView extends GetView<ReportDetailController> {
                     const SizedBox(height: 20),
                     _buildTimelineStep(
                       title: 'Laporan Diterima',
-                      description: 'Laporan berhasil masuk ke sistem BPBD.',
+                      description: 'Laporan berhasil masuk ke sistem verifikasi.',
                       time: dateStr,
                       isCompleted: true,
                       isLast: false,
