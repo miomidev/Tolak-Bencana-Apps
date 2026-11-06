@@ -35,8 +35,8 @@ class HelpController extends GetxController {
     } catch (e) {
       // Offline fallback
       contacts.assignAll([
-        const HelpContactModel(id: 1, type: 'phone', title: 'Telepon', value: '0800-1234-5678 (Gratis)', icon: 'phone'),
-        const HelpContactModel(id: 2, type: 'email', title: 'Email', value: 'bantuan@tolakbencana.id', icon: 'email'),
+        const HelpContactModel(id: 1, type: 'phone', title: 'Telepon / WhatsApp', value: '+62 831-8652-3420 WhatsApp', icon: 'whatsapp'),
+        const HelpContactModel(id: 2, type: 'email', title: 'Email', value: 'bantuan@tolak-bencana.miomidev.com', icon: 'email'),
         const HelpContactModel(id: 3, type: 'website', title: 'Website Resmi', value: 'tolak-bencana.miomidev.com', icon: 'website'),
       ]);
       faqs.assignAll([

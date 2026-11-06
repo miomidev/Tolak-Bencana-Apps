@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/models/help_model.dart';
@@ -231,6 +231,8 @@ class _ContactRow extends StatelessWidget {
 
   IconData _iconForType(String type) {
     switch (type) {
+      case 'whatsapp':
+        return Icons.chat_outlined;
       case 'phone':
         return Icons.phone_outlined;
       case 'email':
@@ -242,6 +244,8 @@ class _ContactRow extends StatelessWidget {
 
   Color _colorForType(String type) {
     switch (type) {
+      case 'whatsapp':
+        return const Color(0xFF25D366);
       case 'phone':
         return const Color(0xFF059669);
       case 'email':
