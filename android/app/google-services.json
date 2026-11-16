@@ -9,6 +9,43 @@
       "client_info": {
         "mobilesdk_app_id": "1:192572861773:android:316b03d8cace4843c2db04",
         "android_client_info": {
+          "package_name": "com.miomidevtb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "192572861773-c29mehh5hlbjd6k5am12ofcjsihvh8g6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.miomidevtb",
+            "certificate_hash": "32a95d5b8a51fd7e0863880de6e73d4236d51296"
+          }
+        },
+        {
+          "client_id": "192572861773-qfpnedaikjredjpskhd4pofuibg2ivd8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvNfZB1urC3_AeNoGYRmf9uriWCiSiHz8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "192572861773-qfpnedaikjredjpskhd4pofuibg2ivd8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192572861773:android:316b03d8cace4843c2db04",
+        "android_client_info": {
           "package_name": "com.miomidev.kaliwedi"
         }
       },
