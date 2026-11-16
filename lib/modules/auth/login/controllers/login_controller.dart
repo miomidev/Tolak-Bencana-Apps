@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/services/auth_service.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class LoginController extends GetxController {
   final emailController = TextEditingController();
@@ -170,7 +171,7 @@ class LoginController extends GetxController {
         'Mode Tamu Aktif',
         'Anda masuk sebagai tamu. Beberapa fitur tidak tersedia.',
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: const Color(0xFF0D9488),
+        backgroundColor: AppColors.primaryGreen,
         colorText: Colors.white,
         duration: const Duration(seconds: 3),
       );

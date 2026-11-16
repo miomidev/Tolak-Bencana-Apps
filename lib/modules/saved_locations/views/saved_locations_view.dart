@@ -171,15 +171,15 @@ class SavedLocationsView extends GetView<SavedLocationsController> {
                       style: BorderStyle.solid,
                     ),
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.add, color: Color(0xFF0F767E), size: 20),
-                      SizedBox(width: 8),
+                      Icon(Icons.add, color: AppColors.primaryGreen, size: 20),
+                      const SizedBox(width: 8),
                       Text(
                         'Tambah Lokasi Baru',
                         style: TextStyle(
-                          color: Color(0xFF0F767E),
+                          color: AppColors.primaryGreen,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
@@ -363,7 +363,7 @@ class SavedLocationFormBottomSheet extends GetView<SavedLocationsController> {
                 child: ElevatedButton(
                   onPressed: controller.saveLocation,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0F767E),
+                    backgroundColor: AppColors.primaryGreen,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(

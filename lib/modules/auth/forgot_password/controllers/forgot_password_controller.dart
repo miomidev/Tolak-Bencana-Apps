@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../core/network/api_client.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../routes/app_routes.dart';
 
 class ForgotPasswordController extends GetxController {
@@ -57,7 +58,7 @@ class ForgotPasswordController extends GetxController {
           devOtp.value.isNotEmpty
               ? 'Kode OTP (dev): ${devOtp.value}'
               : 'Cek email Anda untuk kode OTP.',
-          backgroundColor: const Color(0xFF0F767E),
+          backgroundColor: AppColors.primaryGreen,
           colorText: Colors.white,
           duration: const Duration(seconds: 6),
           snackPosition: SnackPosition.BOTTOM,

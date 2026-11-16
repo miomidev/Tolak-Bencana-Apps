@@ -357,7 +357,7 @@ class DashboardView extends GetView<DashboardController> {
               child: _buildStatItem(
                 value: activeValue,
                 label: 'Laporan Aktif',
-                valueColor: const Color(0xFF0F767E), // Teal
+                valueColor: AppColors.primaryGreen,
               ),
             ),
             VerticalDivider(color: Colors.grey.shade200, width: 1, thickness: 1),
@@ -951,7 +951,7 @@ class ReportCard extends StatelessWidget {
         gradientColors = [const Color(0xFF1E3A8A), const Color(0xFF0284C7)];
         break;
       case 'high':
-        gradientColors = [const Color(0xFF0F767E), const Color(0xFF0D9488)];
+        gradientColors = [AppColors.primaryGreen, AppColors.primaryGreenHover];
         break;
       case 'medium':
         gradientColors = [const Color(0xFF115E59), const Color(0xFF14B8A6)];

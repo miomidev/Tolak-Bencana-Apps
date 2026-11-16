@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/models/help_model.dart';
+import '../../../core/theme/app_colors.dart';
 
 class HelpController extends GetxController {
   final RxBool isLoading = false.obs;
@@ -58,7 +59,7 @@ class HelpController extends GetxController {
     Get.snackbar(
       contact.title,
       contact.value,
-      backgroundColor: const Color(0xFF0F767E),
+      backgroundColor: AppColors.primaryGreen,
       colorText: Colors.white,
       snackPosition: SnackPosition.BOTTOM,
       icon: Icon(_iconForType(contact.type), color: Colors.white),

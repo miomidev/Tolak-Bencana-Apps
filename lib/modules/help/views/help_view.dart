@@ -251,7 +251,7 @@ class _ContactRow extends StatelessWidget {
       case 'email':
         return const Color(0xFF7C3AED);
       default:
-        return const Color(0xFF0F767E);
+        return AppColors.primaryGreen;
     }
   }
 }

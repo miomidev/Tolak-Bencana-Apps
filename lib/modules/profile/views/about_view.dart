@@ -161,7 +161,7 @@ class _AboutViewState extends State<AboutView> {
                               children: [
                                 _LinkRow(
                                   icon: Icons.shield_outlined,
-                                  iconColor: const Color(0xFF0F767E),
+                                  iconColor: AppColors.primaryGreen,
                                   iconBg: const Color(0xFFCCF0F2),
                                   title: 'Kebijakan Privasi',
                                   onTap: () => _showPrivacySheet(context),
