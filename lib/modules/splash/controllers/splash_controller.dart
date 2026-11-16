@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
@@ -6,19 +8,34 @@ import '../../../core/services/auth_service.dart';
 import '../../../routes/app_routes.dart';
 
 class SplashController extends GetxController {
-  @override
-  void onInit() {
-    super.onInit();
-    _startSplash();
+  /// Completed by [SplashView] once the logo has actually been painted.
+  final Completer<void> _logoRendered = Completer<void>();
+
+  bool get isLogoRendered => _logoRendered.isCompleted;
+
+  /// Called by the splash screen when the logo frame is available.
+  void markLogoRendered() {
+    if (!_logoRendered.isCompleted) {
+      _logoRendered.complete();
+    }
   }
 
-  void _startSplash() async {
-    // Show the logo briefly while hydrating auth state in parallel, so the
-    // splash does not add extra waiting time on top of the session check.
+  /// Called by [SplashView] once, when the splash screen is first shown.
+  Future<void> start() async {
+    // Wait until the logo is visibly rendered (with a safety timeout so the
+    // app can never get stuck on the splash), while hydrating auth state in
+    // parallel.
     await Future.wait([
-      Future.delayed(const Duration(milliseconds: 3000)),
+      _logoRendered.future.timeout(
+        const Duration(seconds: 3),
+        onTimeout: () {},
+      ),
       AuthService.init(),
     ]);
+
+    // Keep the logo on screen briefly so it is clearly visible even when the
+    // image decodes very fast.
+    await Future.delayed(const Duration(milliseconds: 800));
 
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
