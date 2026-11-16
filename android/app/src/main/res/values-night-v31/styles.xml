@@ -2,9 +2,12 @@
 <resources>
     <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowSplashScreenBackground">@color/splash_color</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/launch_logo</item>
+        <!-- Transparent icon: the TB logo is shown once by Flutter. -->
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/transparent_splash_icon</item>
+        <!-- Keep the window green between the system splash and Flutter's first frame. -->
+        <item name="android:windowBackground">@color/splash_color</item>
     </style>
     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
-        <item name="android:windowBackground">?android:colorBackground</item>
+        <item name="android:windowBackground">@color/splash_color</item>
     </style>
 </resources>

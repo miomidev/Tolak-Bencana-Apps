@@ -13,10 +13,12 @@ class SplashController extends GetxController {
   }
 
   void _startSplash() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
-
-    // Hydrate reactive auth state from SharedPreferences
-    await AuthService.init();
+    // Show the logo briefly while hydrating auth state in parallel, so the
+    // splash does not add extra waiting time on top of the session check.
+    await Future.wait([
+      Future.delayed(const Duration(milliseconds: 3000)),
+      AuthService.init(),
+    ]);
 
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
