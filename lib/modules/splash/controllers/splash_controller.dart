@@ -13,7 +13,7 @@ class SplashController extends GetxController {
   }
 
   void _startSplash() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(milliseconds: 1000));
 
     // Hydrate reactive auth state from SharedPreferences
     await AuthService.init();

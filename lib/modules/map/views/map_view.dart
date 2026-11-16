@@ -481,41 +481,52 @@ class _TealHeader extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/images/logo.png',
-                    height: 36,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(width: 10),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'TANGGAP BENCANA',
-                        style: TextStyle(
-                          fontSize: 8.5,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white70,
-                          letterSpacing: 0.5,
-                        ),
+              Expanded(
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/logo.png',
+                      height: 36,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(width: 10),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'TANGGAP BENCANA',
+                            style: TextStyle(
+                              fontSize: 8.5,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white70,
+                              letterSpacing: 0.5,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            'TOLAK BENCANA',
+                            style: TextStyle(
+                              fontSize: 17.0,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white,
+                              letterSpacing: 0.8,
+                              height: 1.1,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
-                      Text(
-                        'TOLAK BENCANA',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white,
-                          letterSpacing: 1.0,
-                          height: 1.1,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Obx(() => Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -540,21 +551,12 @@ class _TealHeader extends StatelessWidget {
                       ],
                     ),
                   )),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 6),
                   _headerIconButton(
                     icon: Icons.notifications_none_outlined,
                     onTap: () {
                       if (Get.isRegistered<MainNavigationController>()) {
                         Get.find<MainNavigationController>().changeTab(3);
-                      }
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  _headerIconButton(
-                    icon: Icons.person_outline,
-                    onTap: () {
-                      if (Get.isRegistered<MainNavigationController>()) {
-                        Get.find<MainNavigationController>().changeTab(4);
                       }
                     },
                   ),
