@@ -53,42 +53,53 @@ class DashboardView extends GetView<DashboardController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Left Section: Logo + App Name with PELAPORAN BANJIR title
-                          Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/logo.png',
-                                height: 36,
-                                fit: BoxFit.contain,
-                              ),
-                              const SizedBox(width: 10),
-                              const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'TANGGAP BENCANA',
-                                    style: TextStyle(
-                                      fontSize: 8.5,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white70,
-                                      letterSpacing: 0.5,
-                                    ),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  'assets/images/logo.png',
+                                  height: 36,
+                                  fit: BoxFit.contain,
+                                ),
+                                const SizedBox(width: 10),
+                                const Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'TANGGAP BENCANA',
+                                        style: TextStyle(
+                                          fontSize: 8.5,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white70,
+                                          letterSpacing: 0.5,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text(
+                                        'TOLAK BENCANA',
+                                        style: TextStyle(
+                                          fontSize: 17.0,
+                                          fontWeight: FontWeight.w900,
+                                          color: Colors.white,
+                                          letterSpacing: 0.8,
+                                          height: 1.1,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    'TOLAK BENCANA',
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.w900,
-                                      color: Colors.white,
-                                      letterSpacing: 1.0,
-                                      height: 1.1,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                ),
+                              ],
+                            ),
                           ),
-                          // Right Section: Status, Notif, Profile
+                          const SizedBox(width: 8),
+                          // Right Section: Status and Notif
                           Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               // Online/Offline Status Badge
                               Obx(() {
@@ -96,7 +107,7 @@ class DashboardView extends GetView<DashboardController> {
                                 return GestureDetector(
                                   onTap: controller.toggleOfflineMode,
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
                                     decoration: BoxDecoration(
                                       color: isOffline 
                                           ? Colors.black.withValues(alpha: 0.2) 
@@ -108,13 +119,14 @@ class DashboardView extends GetView<DashboardController> {
                                       ),
                                     ),
                                     child: Row(
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Icon(
                                           isOffline ? Icons.wifi_off : Icons.wifi, 
                                           color: isOffline ? Colors.white70 : Colors.white, 
                                           size: 12,
                                         ),
-                                        const SizedBox(width: 5),
+                                        const SizedBox(width: 4),
                                         Text(
                                           isOffline ? 'Offline' : 'Online',
                                           style: TextStyle(
@@ -128,23 +140,13 @@ class DashboardView extends GetView<DashboardController> {
                                   ),
                                 );
                               }),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 6),
                               // Notification Button
                               _buildHeaderIconButton(
                                 icon: Icons.notifications_none_outlined,
                                 onTap: () {
                                   if (Get.isRegistered<MainNavigationController>()) {
                                     Get.find<MainNavigationController>().changeTab(3);
-                                  }
-                                },
-                              ),
-                              const SizedBox(width: 8),
-                              // Profile Button
-                              _buildHeaderIconButton(
-                                icon: Icons.person_outline,
-                                onTap: () {
-                                  if (Get.isRegistered<MainNavigationController>()) {
-                                    Get.find<MainNavigationController>().changeTab(4);
                                   }
                                 },
                               ),
