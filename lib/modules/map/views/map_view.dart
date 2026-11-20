@@ -32,6 +32,7 @@ class _MapViewState extends State<MapView> {
   }
   final fm.MapController _mapController = fm.MapController();
   bool _hasInitialCentered = false;
+  Worker? _locationWorker;
 
   @override
   void initState() {
@@ -40,17 +41,27 @@ class _MapViewState extends State<MapView> {
   }
 
   void _autoCenterOnce() {
-    ever(controller.currentLat, (_) {
-      if (!_hasInitialCentered && !controller.isLoadingLocation.value) {
+    _locationWorker = ever(controller.currentLat, (_) {
+      if (!_hasInitialCentered && !controller.isLoadingLocation.value && mounted) {
         _hasInitialCentered = true;
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          _mapController.move(
-            LatLng(controller.currentLat.value, controller.currentLng.value),
-            _mapController.camera.zoom,
-          );
+          if (mounted) {
+            try {
+              _mapController.move(
+                LatLng(controller.currentLat.value, controller.currentLng.value),
+                _mapController.camera.zoom,
+              );
+            } catch (_) {}
+          }
         });
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _locationWorker?.dispose();
+    super.dispose();
   }
 
   @override
@@ -115,39 +126,43 @@ class _MapViewState extends State<MapView> {
                 _FloodAlertPanel(controller: controller),
 
                 // ── Evacuation Button ─────────────────────────────
-                // Positioned at bottom-left, above the flood alert panel
-                // but BELOW the marker popup card (which sits at bottom: 200)
+                // Positioned above the flood alert panel
                 Obx(() {
                   // Hide button when popup is visible to avoid overlap
                   final hasPopup = controller.selectedPopup.value != null;
-                  return Positioned(
+                  if (hasPopup) return const SizedBox.shrink();
+
+                  final isExpanded = controller.isAlertPanelExpanded.value;
+                  final double bottomOffset = isExpanded
+                      ? (MediaQuery.of(context).size.height * 0.4 + 58.0)
+                      : 58.0;
+
+                  return AnimatedPositioned(
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeInOut,
                     left: 16,
-                    bottom: hasPopup ? 8 : 210,
-                    child: AnimatedSlide(
-                      duration: const Duration(milliseconds: 200),
-                      offset: Offset.zero,
-                      child: GestureDetector(
-                        onTap: () => Get.toNamed(Routes.evacuation),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFDC2626),
-                            borderRadius: BorderRadius.circular(24),
-                            boxShadow: [
-                              BoxShadow(color: Colors.red.withValues(alpha: 0.4), blurRadius: 10, offset: const Offset(0, 4)),
-                            ],
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.emergency, color: Colors.white, size: 18),
-                              SizedBox(width: 6),
-                              Text(
-                                'Jalur Evakuasi',
-                                style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
+                    bottom: bottomOffset,
+                    child: GestureDetector(
+                      onTap: () => Get.toNamed(Routes.evacuation),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFDC2626),
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(color: Colors.red.withValues(alpha: 0.4), blurRadius: 10, offset: const Offset(0, 4)),
+                          ],
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.emergency, color: Colors.white, size: 18),
+                            SizedBox(width: 6),
+                            Text(
+                              'Jalur Evakuasi',
+                              style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -896,9 +911,16 @@ class _MarkerPopupCard extends StatelessWidget {
       final color = _levelColor(popup.statusLevel);
       final bgColor = _levelBg(popup.statusLevel);
 
-      return Positioned(
+      final isExpanded = controller.isAlertPanelExpanded.value;
+      final double bottomOffset = isExpanded
+          ? (MediaQuery.of(context).size.height * 0.4 + 58.0)
+          : 58.0;
+
+      return AnimatedPositioned(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut,
         left: 12, right: 12,
-        bottom: 200, // above flood panel
+        bottom: bottomOffset,
         child: Material(
           borderRadius: BorderRadius.circular(14),
           elevation: 8,
@@ -1095,6 +1117,7 @@ class _FloodAlertPanel extends StatelessWidget {
             children: [
               // Header row (always visible)
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: controller.toggleAlertPanel,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),

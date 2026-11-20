@@ -24,7 +24,9 @@ class _EvacuationRouteViewState extends State<EvacuationRouteView> {
   @override
   void initState() {
     super.initState();
-    _ctrl = Get.find<EvacuationController>();
+    _ctrl = Get.isRegistered<EvacuationController>()
+        ? Get.find<EvacuationController>()
+        : Get.put(EvacuationController());
     // Auto-fit map once route is loaded
     ever(_ctrl.routePoints, (points) {
       if (points.isNotEmpty) {

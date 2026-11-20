@@ -77,7 +77,7 @@ class EditProfileController extends GetxController {
       if (photoPath.value.isNotEmpty) {
         dataMap['photo'] = await dio.MultipartFile.fromFile(
           photoPath.value,
-          filename: photoPath.value.split('/').last,
+          filename: photoPath.value.split(RegExp(r'[/\\]')).last,
         );
       }
 

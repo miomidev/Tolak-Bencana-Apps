@@ -72,7 +72,7 @@ class MapController extends GetxController {
   final RxBool showAman   = true.obs;
 
   // â”€â”€ UI state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  final RxBool isAlertPanelExpanded = true.obs;
+  final RxBool isAlertPanelExpanded = false.obs;
   final Rxn<MapPopupData> selectedPopup = Rxn<MapPopupData>();
 
   // â”€â”€ Search â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -100,6 +100,9 @@ class MapController extends GetxController {
   void dismissPopup() => selectedPopup.value = null;
 
   void showMarkerPopup(MapPopupData data) {
+    if (isAlertPanelExpanded.value) {
+      isAlertPanelExpanded.value = false;
+    }
     selectedPopup.value = data;
   }
 
