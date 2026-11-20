@@ -23,7 +23,13 @@ class MapView extends StatefulWidget {
 }
 
 class _MapViewState extends State<MapView> {
-  MapController get controller => Get.find<MapController>();
+  MapController get controller {
+    try {
+      return Get.find<MapController>();
+    } catch (_) {
+      return Get.put(MapController());
+    }
+  }
   final fm.MapController _mapController = fm.MapController();
   bool _hasInitialCentered = false;
 

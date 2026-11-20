@@ -18,14 +18,14 @@ class MainNavigationView extends GetView<MainNavigationController> {
   @override
   Widget build(BuildContext context) {
     // Inject required controllers for child tabs if not already present
-    if (!Get.isRegistered<MapController>()) {
-      Get.lazyPut<MapController>(() => MapController());
-    }
     if (!Get.isRegistered<DashboardController>()) {
-      Get.lazyPut<DashboardController>(() => DashboardController());
+      Get.put<DashboardController>(DashboardController());
+    }
+    if (!Get.isRegistered<MapController>()) {
+      Get.put<MapController>(MapController());
     }
     if (!Get.isRegistered<NotificationController>()) {
-      Get.lazyPut<NotificationController>(() => NotificationController());
+      Get.put<NotificationController>(NotificationController());
     }
 
     final List<Widget> screens = [

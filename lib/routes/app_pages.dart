@@ -11,6 +11,9 @@ import '../modules/auth/register/controllers/register_controller.dart';
 import '../modules/auth/register/views/register_view.dart';
 import '../modules/main_navigation/controllers/main_navigation_controller.dart';
 import '../modules/main_navigation/views/main_navigation_view.dart';
+import '../modules/dashboard/controllers/dashboard_controller.dart';
+import '../modules/notification/controllers/notification_controller.dart';
+import '../modules/profile/controllers/profile_controller.dart';
 import '../modules/report_flood/controllers/report_flood_controller.dart';
 import '../modules/report_flood/views/report_flood_view.dart';
 import '../modules/saved_locations/controllers/saved_locations_controller.dart';
@@ -81,6 +84,10 @@ class AppPages {
       page: () => const MainNavigationView(),
       binding: BindingsBuilder(() {
         Get.lazyPut<MainNavigationController>(() => MainNavigationController());
+        Get.lazyPut<DashboardController>(() => DashboardController(), fenix: true);
+        Get.lazyPut<MapController>(() => MapController(), fenix: true);
+        Get.lazyPut<NotificationController>(() => NotificationController(), fenix: true);
+        Get.lazyPut<ProfileController>(() => ProfileController(), fenix: true);
       }),
     ),
     GetPage(
