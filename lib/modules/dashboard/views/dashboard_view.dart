@@ -170,6 +170,12 @@ class DashboardView extends GetView<DashboardController> {
                         ),
                         child: TextField(
                           onChanged: controller.updateSearchQuery,
+                          style: const TextStyle(
+                            color: AppColors.textDark,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          cursorColor: AppColors.primaryGreen,
                           decoration: const InputDecoration(
                             hintText: 'Cari laporan bencana...',
                             hintStyle: TextStyle(color: Colors.black38, fontSize: 14),
@@ -650,6 +656,11 @@ class DashboardView extends GetView<DashboardController> {
                             Expanded(
                               child: TextField(
                                 controller: controller.commentTextController,
+                                style: const TextStyle(
+                                  color: AppColors.textDark,
+                                  fontSize: 14,
+                                ),
+                                cursorColor: AppColors.primaryGreen,
                                 decoration: InputDecoration(
                                   hintText: 'Tulis komentar...',
                                   hintStyle: const TextStyle(fontSize: 14),

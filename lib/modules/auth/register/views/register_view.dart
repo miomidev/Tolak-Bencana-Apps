@@ -236,6 +236,12 @@ class RegisterView extends GetView<RegisterController> {
         TextField(
           controller: controller,
           keyboardType: keyboardType,
+          style: const TextStyle(
+            color: AppColors.textDark,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+          cursorColor: AppColors.primaryGreen,
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: const TextStyle(color: Colors.black38, fontSize: 14),
@@ -251,7 +257,7 @@ class RegisterView extends GetView<RegisterController> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.primaryTeal),
+              borderSide: const BorderSide(color: AppColors.primaryGreen, width: 1.5),
             ),
           ),
         ),
@@ -278,6 +284,12 @@ class RegisterView extends GetView<RegisterController> {
           () => TextField(
             controller: controller,
             obscureText: isHidden.value,
+            style: const TextStyle(
+              color: AppColors.textDark,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+            cursorColor: AppColors.primaryGreen,
             decoration: InputDecoration(
               hintText: hint,
               hintStyle: const TextStyle(color: Colors.black38, fontSize: 14),
@@ -300,7 +312,7 @@ class RegisterView extends GetView<RegisterController> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: AppColors.primaryTeal),
+                borderSide: const BorderSide(color: AppColors.primaryGreen, width: 1.5),
               ),
             ),
           ),

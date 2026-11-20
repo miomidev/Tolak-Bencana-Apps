@@ -234,6 +234,7 @@ class ReportFloodView extends GetView<ReportFloodController> {
         controller: controller,
         keyboardType: keyboardType,
         maxLines: maxLines,
+        cursorColor: AppColors.primaryGreen,
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: const TextStyle(color: Colors.black38, fontSize: 13),
@@ -241,7 +242,7 @@ class ReportFloodView extends GetView<ReportFloodController> {
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
-        style: const TextStyle(fontSize: 14, color: Colors.black87),
+        style: const TextStyle(fontSize: 14, color: AppColors.textDark),
       ),
     );
   }

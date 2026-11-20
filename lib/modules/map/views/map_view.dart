@@ -619,6 +619,7 @@ class _SearchBar extends StatelessWidget {
                 child: TextField(
                   controller: controller.searchController,
                   onChanged: controller.onSearchChanged,
+                  cursorColor: AppColors.primaryGreen,
                   style: const TextStyle(fontSize: 13.5, color: Color(0xFF1E293B)),
                   decoration: InputDecoration(
                     isDense: true,

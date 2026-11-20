@@ -99,6 +99,8 @@ class LoginView extends GetView<LoginController> {
                       TextField(
                         controller: controller.emailController,
                         keyboardType: TextInputType.emailAddress,
+                        style: const TextStyle(color: AppColors.textDark, fontSize: 14, fontWeight: FontWeight.w500),
+                        cursorColor: AppColors.primaryGreen,
                         decoration: InputDecoration(
                           hintText: 'nama@gmail.com / nama.user',
                           hintStyle: const TextStyle(color: Colors.black38),
@@ -113,7 +115,7 @@ class LoginView extends GetView<LoginController> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: AppColors.primaryTeal),
+                            borderSide: const BorderSide(color: AppColors.primaryGreen),
                           ),
                         ),
                       ),
@@ -131,6 +133,8 @@ class LoginView extends GetView<LoginController> {
                         () => TextField(
                           controller: controller.passwordController,
                           obscureText: controller.isPasswordHidden.value,
+                          style: const TextStyle(color: AppColors.textDark, fontSize: 14, fontWeight: FontWeight.w500),
+                          cursorColor: AppColors.primaryGreen,
                           decoration: InputDecoration(
                             hintText: 'Masukkan kata sandi',
                             hintStyle: const TextStyle(color: Colors.black38),
@@ -154,7 +158,7 @@ class LoginView extends GetView<LoginController> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(color: AppColors.primaryTeal),
+                              borderSide: const BorderSide(color: AppColors.primaryGreen),
                             ),
                           ),
                         ),

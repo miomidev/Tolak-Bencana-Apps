@@ -228,7 +228,8 @@ class _EditReportViewState extends State<EditReportView> {
               child: TextField(
                 controller: _descController,
                 maxLines: 4,
-                style: const TextStyle(fontSize: 14),
+                style: const TextStyle(color: AppColors.textDark, fontSize: 14),
+                cursorColor: AppColors.primaryGreen,
                 decoration: InputDecoration(
                   hintText: 'Jelaskan kondisi banjir secara detail...',
                   hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),

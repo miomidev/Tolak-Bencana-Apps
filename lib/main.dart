@@ -35,38 +35,57 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Tolak Bencana',
       theme: ThemeData(
-        primaryColor: AppColors.primaryBlue,
+        primaryColor: AppColors.primaryGreen,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.primaryBlue,
-          primary: AppColors.primaryBlue,
+          seedColor: AppColors.primaryGreen,
+          primary: AppColors.primaryGreen,
+          surface: Colors.white,
+          onSurface: AppColors.textDark,
         ),
         scaffoldBackgroundColor: AppColors.backgroundLight,
         useMaterial3: true,
-        textTheme: ThemeData(useMaterial3: true).textTheme.copyWith(
+        textTheme: ThemeData.light(useMaterial3: true).textTheme.copyWith(
           displayLarge: const TextStyle(
             fontFamily: 'Fredoka',
             fontWeight: FontWeight.w800,
             fontSize: 32,
-            color: Colors.white,
+            color: AppColors.textDark,
           ),
           displayMedium: const TextStyle(
             fontFamily: 'Fredoka',
             fontWeight: FontWeight.w700,
             fontSize: 24,
-            color: Colors.white,
+            color: AppColors.textDark,
           ),
           titleLarge: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w600,
             fontSize: 20,
-            color: Colors.white,
+            color: AppColors.textDark,
           ),
           bodyLarge: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w400,
             fontSize: 16,
-            color: Colors.white70,
+            color: AppColors.textDark,
           ),
+          bodyMedium: const TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w400,
+            fontSize: 14,
+            color: AppColors.textDark,
+          ),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          hintStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
+          labelStyle: TextStyle(color: AppColors.textDark, fontSize: 14),
+          prefixIconColor: Color(0xFF94A3B8),
+          suffixIconColor: Color(0xFF94A3B8),
+        ),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: AppColors.primaryGreen,
+          selectionColor: Color(0x3315803D),
+          selectionHandleColor: AppColors.primaryGreen,
         ),
       ),
       initialRoute: AppPages.initial,
